@@ -1,0 +1,19 @@
+# Create this as .env file in c:\Users\2000054\Desktop\employee-api\
+
+# JWT Configuration
+JWT_SECRET=your-super-secret-jwt-key-minimum-32-characters-long-12345
+JWT_EXPIRE=7d
+REFRESH_TOKEN_EXPIRE=30d
+
+# Server Configuration
+NODE_ENV=development
+PORT=5000
+
+# Database Configuration
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password_here
+DB_NAME=employee_management
+
+# CORS Configuration
+FRONTEND_URL=http://localhost:3000

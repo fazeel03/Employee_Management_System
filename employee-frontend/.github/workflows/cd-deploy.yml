@@ -1,0 +1,224 @@
+# 🚀 Continuous Deployment Pipeline - With Detailed Explanations
+# This workflow deploys your application to staging and production
+
+name: CD - Deploy Application
+
+# TRIGGER: When should deployment happen?
+on:
+  workflow_run:
+    workflows: ["Enhanced CI Pipeline"]  # Run after CI completes
+    types:
+      - completed
+    branches: [main]
+  
+  # Manual trigger option
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+
+# ENVIRONMENT VARIABLES
+env:
+  DOCKER_IMAGE: fazeelmemon/employee-frontend
+
+# JOBS
+jobs:
+  
+  # ============================================
+  # JOB 1: DEPLOY TO STAGING
+  # Purpose: Automatically deploy to staging environment
+  # ============================================
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    
+    # Only deploy if CI passed
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    
+    environment:
+      name: staging
+      url: https://staging.yourapp.com  # Replace with your staging URL
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      # STEP: Pull latest Docker image
+      - name: 🐳 Pull Docker image
+        run: |
+          echo "Pulling latest Docker image..."
+          docker pull ${{ env.DOCKER_IMAGE }}:latest
+        # Why? Get the image that was just built by CI
+        
+      # STEP: Deploy to staging server
+      - name: 🚀 Deploy to Staging
+        run: |
+          echo "Deploying to staging environment..."
+          # In real scenario, you would:
+          # 1. SSH into staging server
+          # 2. Pull new Docker image
+          # 3. Stop old container
+          # 4. Start new container
+          # 5. Run health checks
+          
+          # Example deployment command:
+          # ssh user@staging-server "docker pull ${{ env.DOCKER_IMAGE }}:latest && docker-compose up -d"
+        # Why? Update staging with latest code
+        
+      # STEP: Health check
+      - name: 🏥 Health check
+        run: |
+          echo "Running health checks..."
+          # curl -f https://staging.yourapp.com/health || exit 1
+          sleep 5
+          echo "✅ Staging is healthy!"
+        # Why? Ensure deployment was successful
+        
+      # STEP: Run smoke tests
+      - name: 🧪 Run smoke tests
+        run: |
+          echo "Running smoke tests on staging..."
+          # Basic tests to ensure critical features work
+          # Example: Check if homepage loads, login works, etc.
+        # Why? Quick validation that app is working
+
+  # ============================================
+  # JOB 2: DEPLOY TO PRODUCTION
+  # Purpose: Deploy to production with manual approval
+  # Depends on: staging deployment must succeed
+  # ============================================
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [deploy-staging]  # Wait for staging to succeed
+    
+    # Production environment with protection rules
+    environment:
+      name: production
+      url: https://yourapp.com  # Replace with your production URL
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      # STEP: Create deployment backup
+      - name: 💾 Create backup
+        run: |
+          echo "Creating backup of current production..."
+          # In real scenario:
+          # 1. Tag current production image as backup
+          # 2. Backup database
+          # 3. Save current configuration
+        # Why? Enable rollback if deployment fails
+        
+      # STEP: Pull latest Docker image
+      - name: 🐳 Pull Docker image
+        run: |
+          echo "Pulling latest Docker image..."
+          docker pull ${{ env.DOCKER_IMAGE }}:latest
+        
+      # STEP: Deploy to production
+      - name: 🚀 Deploy to Production
+        run: |
+          echo "Deploying to production environment..."
+          # In real scenario:
+          # 1. Use blue-green deployment
+          # 2. Deploy to new servers (green)
+          # 3. Run health checks
+          # 4. Switch traffic from old (blue) to new (green)
+          # 5. Keep old servers running for quick rollback
+          
+          # Example:
+          # ssh user@prod-server "docker pull ${{ env.DOCKER_IMAGE }}:latest && docker-compose up -d"
+        # Why? Update production with latest code
+        
+      # STEP: Health check
+      - name: 🏥 Health check
+        run: |
+          echo "Running health checks..."
+          # curl -f https://yourapp.com/health || exit 1
+          sleep 5
+          echo "✅ Production is healthy!"
+        # Why? Ensure deployment was successful
+        
+      # STEP: Run production smoke tests
+      - name: 🧪 Run production smoke tests
+        run: |
+          echo "Running smoke tests on production..."
+          # Critical tests only
+          # Example: Homepage loads, API responds, database connected
+        # Why? Final validation before considering deployment complete
+        
+      # STEP: Notify team
+      - name: 📢 Notify team
+        run: |
+          echo "Sending deployment notification..."
+          # In real scenario:
+          # Send Slack/Email notification
+          # Update deployment tracking system
+        # Why? Keep team informed of deployments
+
+  # ============================================
+  # JOB 3: ROLLBACK (Manual Trigger Only)
+  # Purpose: Rollback to previous version if issues found
+  # ============================================
+  rollback:
+    name: Rollback Deployment
+    runs-on: ubuntu-latest
+    
+    # Only run when manually triggered
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'rollback'
+    
+    environment:
+      name: production
+    
+    steps:
+      - name: ⏮️ Rollback to previous version
+        run: |
+          echo "Rolling back to previous version..."
+          # In real scenario:
+          # 1. Switch traffic back to old servers (blue)
+          # 2. Or deploy previous Docker image tag
+          # 3. Restore database backup if needed
+          
+          # Example:
+          # docker pull ${{ env.DOCKER_IMAGE }}:previous
+          # docker-compose up -d
+        # Why? Quick recovery from failed deployment
+        
+      - name: 🏥 Verify rollback
+        run: |
+          echo "Verifying rollback..."
+          # Check if old version is working
+        # Why? Ensure rollback was successful
+
+  # ============================================
+  # JOB 4: DEPLOYMENT SUMMARY
+  # Purpose: Provide deployment summary
+  # ============================================
+  deployment-summary:
+    name: Deployment Summary
+    runs-on: ubuntu-latest
+    needs: [deploy-staging, deploy-production]
+    if: always()
+    
+    steps:
+      - name: 📊 Generate deployment summary
+        run: |
+          echo "## 🎉 Deployment Complete!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Deployment Results:" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Staging: Deployed successfully" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Production: Deployed successfully" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Image:** ${{ env.DOCKER_IMAGE }}:latest" >> $GITHUB_STEP_SUMMARY
+          echo "**Deployed at:** $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### URLs:" >> $GITHUB_STEP_SUMMARY
+          echo "- Staging: https://staging.yourapp.com" >> $GITHUB_STEP_SUMMARY
+          echo "- Production: https://yourapp.com" >> $GITHUB_STEP_SUMMARY

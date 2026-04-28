@@ -1,0 +1,3923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Coding Assistants — Six-Platform Intelligence Brief 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #FFFFFF;
+    --ink-mid:   #F5F5F8;
+    --ink-lt:    #EAEAF0;
+    --rule:      #D0D0DC;
+    --rule-lt:   #B0B0C0;
+    --cream:     #1A1A2A;
+    --cream-dim: #3A3A52;
+    --gold:      #8B6B1A;
+    --gold-lt:   #A07820;
+    --amber:     #C04010;
+    --teal:      #1A7F7A;
+    --slate:     #4A5A70;
+    --ghost:     rgba(0,0,0,0.03);
+    --ghost2:    rgba(0,0,0,0.06);
+    --ghost3:    rgba(0,0,0,0.10);
+    --blue:      #1A4A8A;
+    --purple:    #5A2A8A;
+    --green:     #1A6A3A;
+    --openai:    #1A4A8A;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+
+  body {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 10% 20%, rgba(139,107,26,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 80%, rgba(26,127,122,0.05) 0%, transparent 60%),
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,0,0,0.012) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,0,0,0.008) 40px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    max-width: 1340px;
+    margin: 0 auto;
+    padding: 64px 56px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 48px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .main-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 3.5vw, 52px);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+  }
+  .main-title em { font-style: italic; color: var(--gold); }
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--cream-dim);
+    margin-top: 12px;
+    font-style: italic;
+  }
+  .meta-block {
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    color: var(--rule-lt);
+    text-transform: uppercase;
+    line-height: 2;
+    text-align: right;
+  }
+  .meta-block strong { color: var(--cream-dim); font-weight: 400; }
+
+  /* ── BENCHMARK STRIP ── */
+  .benchmark-strip {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-bottom: 52px;
+    animation: fadeUp 0.6s ease 0.1s both;
+  }
+  .bench-cell {
+    background: var(--ink-mid);
+    padding: 22px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .bench-cell::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .bench-cell:hover::after { transform: scaleX(1); }
+  .bench-label {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-bottom: 8px;
+  }
+  .bench-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .bench-sub {
+    font-size: 10px;
+    color: var(--cream-dim);
+    margin-top: 6px;
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .section-num {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cream);
+    letter-spacing: -0.01em;
+  }
+  .section-rule { flex: 1; height: 1px; background: var(--rule); }
+
+  /* ── TOOL HEADER ROW (6 cols) ── */
+  .tool-headers {
+    display: grid;
+    grid-template-columns: 200px repeat(6, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    margin-bottom: 1px;
+  }
+  .th-spacer { background: var(--ink); }
+  .tool-header {
+    background: var(--ink-lt);
+    padding: 18px 14px;
+    position: relative;
+    cursor: default;
+    transition: background 0.2s;
+  }
+  .tool-header:hover { background: var(--ghost2); }
+  .tool-header.is-hero {
+    background: linear-gradient(135deg, #fdf8ec 0%, #f5edd0 100%);
+    border-top: 2px solid var(--gold);
+  }
+  .tool-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 2px;
+  }
+  .tool-header.is-hero .tool-name { color: var(--gold); }
+  .tool-maker {
+    font-size: 9px;
+    color: var(--slate);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .hero-badge {
+    position: absolute;
+    top: 8px; right: 8px;
+    font-size: 7px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    background: var(--gold);
+    padding: 2px 6px;
+    font-weight: 500;
+  }
+
+  /* ── DATA ROWS ── */
+  .data-rows { display: flex; flex-direction: column; gap: 1px; background: var(--rule); }
+  .data-row {
+    display: grid;
+    grid-template-columns: 200px repeat(6, 1fr);
+    gap: 1px;
+    background: var(--rule);
+  }
+  .row-label {
+    background: var(--ink-mid);
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .row-label-text {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    line-height: 1.5;
+  }
+  .row-label-sub {
+    font-size: 9px;
+    color: var(--slate);
+    margin-top: 3px;
+    letter-spacing: 0.05em;
+    font-style: italic;
+  }
+  .data-cell {
+    background: var(--ink-mid);
+    padding: 13px 14px;
+    transition: background 0.15s;
+  }
+  .data-cell:hover { background: var(--ghost2); }
+  .data-cell.is-hero { background: rgba(139,107,26,0.07); }
+  .data-cell.is-hero:hover { background: rgba(139,107,26,0.12); }
+  .cell-primary {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.2;
+    margin-bottom: 3px;
+  }
+  .is-hero .cell-primary { color: var(--gold-lt); }
+  .cell-secondary {
+    font-size: 9.5px;
+    color: var(--slate);
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+  }
+
+  /* Score bars */
+  .score-bar-wrap { margin-top: 6px; }
+  .score-bar { height: 3px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+  .score-fill { height: 100%; border-radius: 2px; background: var(--slate); transition: width 1s ease; }
+  .is-hero .score-fill { background: var(--gold); }
+  .score-label { font-size: 9px; color: var(--slate); margin-top: 4px; letter-spacing: 0.08em; }
+  .is-hero .score-label { color: var(--gold); }
+
+  /* Rank badge */
+  .rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    font-size: 9px;
+    font-weight: 700;
+    background: var(--rule);
+    color: var(--slate);
+    margin-top: 4px;
+  }
+  .rank-badge.r1 { background: var(--gold); color: #fff; }
+  .rank-badge.r2 { background: var(--rule-lt); color: var(--cream-dim); }
+
+  /* ── RATING STARS / DOTS ── */
+  .rating-dots {
+    display: flex;
+    gap: 3px;
+    margin-top: 6px;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--rule);
+  }
+  .dot.filled { background: var(--teal); }
+  .dot.hero-filled { background: var(--gold); }
+  .dot.amber-filled { background: var(--amber); }
+
+  /* ── COMPARISON SECTION ── */
+  .comparison-section { margin-bottom: 52px; animation: fadeUp 0.6s ease 0.2s both; }
+
+  /* ── VELOCITY VISUAL ── */
+  .velocity-section { margin-bottom: 52px; animation: fadeUp 0.6s ease 0.25s both; }
+  .velocity-chart {
+    background: var(--ink-mid);
+    border: 1px solid var(--rule);
+    padding: 36px 40px;
+  }
+  .vel-row {
+    display: grid;
+    grid-template-columns: 200px 80px 1fr 110px 110px;
+    align-items: center;
+    gap: 0;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .vel-row:last-child { border-bottom: none; }
+  .vel-row.header-row {
+    padding-bottom: 14px;
+    margin-bottom: 4px;
+  }
+  .vel-tool {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cream);
+  }
+  .vel-tool.hero { color: var(--gold); }
+  .vel-header-label {
+    font-size: 8.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--slate);
+  }
+  .vel-gain {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--teal);
+    text-align: right;
+    padding-right: 16px;
+  }
+  .vel-gain.hero { color: var(--gold); }
+  .vel-bar-wrap { padding: 0 20px 0 0; }
+  .vel-bar-track {
+    height: 8px;
+    background: var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .vel-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--slate);
+    transition: width 1.2s ease 0.3s;
+  }
+  .vel-bar-fill.hero-fill {
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-lt) 100%);
+  }
+  .vel-bar-fill.teal-fill { background: var(--teal); }
+  .vel-note {
+    font-size: 9px;
+    color: var(--slate);
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+    font-style: italic;
+  }
+  .vel-note.hero { color: var(--gold); font-style: normal; }
+  .vel-swe {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--cream-dim);
+    text-align: right;
+  }
+  .vel-swe.hero { color: var(--gold); }
+
+  /* ── RADAR / SPIDER SECTION ── */
+  .radar-section { margin-bottom: 52px; animation: fadeUp 0.6s ease 0.3s both; }
+  .radar-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+  }
+  .radar-card {
+    background: var(--ink-mid);
+    padding: 32px 36px;
+  }
+  .radar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .radar-title span { color: var(--gold); }
+
+  /* ── ATTRIBUTE TABLE ── */
+  .attr-table { width: 100%; border-collapse: collapse; }
+  .attr-row { border-bottom: 1px solid rgba(0,0,0,0.05); }
+  .attr-row:last-child { border-bottom: none; }
+  .attr-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    padding: 10px 0;
+    width: 160px;
+  }
+  .attr-bars { padding: 10px 16px; }
+  .attr-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .attr-bar-row:last-child { margin-bottom: 0; }
+  .attr-tool-tag {
+    font-size: 8.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--slate);
+    width: 80px;
+    flex-shrink: 0;
+  }
+  .attr-bar-track {
+    flex: 1;
+    height: 6px;
+    background: var(--rule);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .attr-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 1.2s ease 0.4s;
+  }
+  .attr-score-tag {
+    font-size: 9px;
+    color: var(--slate);
+    width: 30px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Tool colours */
+  .c-claude  { background: linear-gradient(90deg, #8B6B1A, #C9A84C); }
+  .c-github  { background: #1A4A8A; }
+  .c-msft    { background: #5A2A8A; }
+  .c-gemini  { background: #1A7F7A; }
+  .c-amazonq { background: #C04010; }
+
+  /* ── PROS/CONS SECTION ── */
+  .proscons-section { margin-bottom: 52px; animation: fadeUp 0.6s ease 0.35s both; }
+  .proscons-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1px;
+    background: var(--rule);
+  }
+  .proscons-card {
+    background: var(--ink-mid);
+    padding: 24px 20px;
+    transition: background 0.2s;
+  }
+  .proscons-card:hover { background: var(--ghost2); }
+  .proscons-card.is-hero {
+    background: linear-gradient(160deg, rgba(139,107,26,0.08) 0%, rgba(139,107,26,0.03) 100%);
+    border-left: 2px solid var(--gold);
+  }
+  .card-tool-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .proscons-card.is-hero .card-tool-name { color: var(--gold); }
+  .pro-list, .con-list { list-style: none; margin-bottom: 14px; }
+  .pro-list li, .con-list li {
+    font-size: 10.5px;
+    line-height: 1.6;
+    color: var(--cream-dim);
+    padding: 5px 0;
+    padding-left: 16px;
+    position: relative;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    letter-spacing: 0.02em;
+  }
+  .pro-list li::before { content: '+'; position: absolute; left: 0; color: var(--teal); font-weight: 700; font-size: 12px; }
+  .con-list li::before { content: '−'; position: absolute; left: 0; color: var(--amber); font-weight: 700; font-size: 14px; line-height: 1.4; }
+  .list-header { font-size: 8.5px; letter-spacing: 0.28em; text-transform: uppercase; margin-bottom: 8px; }
+  .list-header.pros { color: var(--teal); }
+  .list-header.cons { color: var(--amber); }
+
+  /* ── RANKING STRIP ── */
+  .ranking-strip {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    margin-bottom: 52px;
+    animation: fadeUp 0.6s ease 0.45s both;
+  }
+  .rank-cell {
+    background: var(--ink-mid);
+    padding: 22px 16px;
+    text-align: center;
+    transition: background 0.2s;
+    cursor: default;
+  }
+  .rank-cell:hover { background: var(--ghost2); }
+  .rank-cell.r1 {
+    background: linear-gradient(160deg, rgba(139,107,26,0.12) 0%, rgba(139,107,26,0.04) 100%);
+    border-top: 2px solid var(--gold);
+  }
+  .rank-cell.r2 { border-top: 2px solid var(--rule-lt); }
+  .rank-pos {
+    font-family: 'Playfair Display', serif;
+    font-size: 34px;
+    font-weight: 900;
+    color: var(--rule-lt);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .rank-cell.r1 .rank-pos { color: var(--gold); }
+  .rank-cell.r2 .rank-pos { color: var(--cream-dim); }
+  .rank-cell-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 4px;
+    font-family: 'Playfair Display', serif;
+  }
+  .rank-cell.r1 .rank-cell-name { color: var(--gold-lt); }
+  .rank-category {
+    font-size: 9px;
+    color: var(--slate);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  /* ── VERDICT SECTION ── */
+  .verdict-section { margin-bottom: 52px; animation: fadeUp 0.6s ease 0.5s both; }
+  .verdict-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+  }
+  .verdict-main {
+    background: linear-gradient(135deg, #f8f8ff 0%, #f0f0fa 100%);
+    padding: 36px 32px;
+    border-top: 2px solid var(--gold);
+    position: relative;
+    overflow: hidden;
+  }
+  .verdict-main::before {
+    content: '01';
+    position: absolute;
+    top: -10px; right: 20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 120px;
+    font-weight: 900;
+    color: rgba(139,107,26,0.06);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .verdict-label { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+  .verdict-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--cream);
+    line-height: 1.15;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+  .verdict-headline em { color: var(--gold); font-style: italic; }
+  .verdict-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    color: var(--cream-dim);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+  .verdict-side {
+    background: var(--ink-mid);
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .verdict-side.gold-bg { background: linear-gradient(160deg, rgba(139,107,26,0.10) 0%, rgba(139,107,26,0.04) 100%); }
+  .vs-label { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--slate); margin-bottom: 10px; }
+  .vs-value { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--cream); margin-bottom: 5px; }
+  .vs-value.highlight { color: var(--gold); }
+  .vs-sub { font-size: 10px; color: var(--slate); line-height: 1.5; letter-spacing: 0.03em; }
+  .vs-divider { height: 1px; background: var(--rule); margin: 18px 0; }
+
+  /* ── RESEARCH FOOTNOTE ── */
+  .research-bar {
+    background: var(--ink-mid);
+    border: 1px solid var(--rule);
+    padding: 20px 28px;
+    margin-bottom: 52px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    align-items: center;
+    animation: fadeUp 0.6s ease 0.15s both;
+  }
+  .research-label {
+    font-size: 8.5px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+  }
+  .research-sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .source-pill {
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: var(--slate);
+    background: var(--ink-lt);
+    border: 1px solid var(--rule);
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+
+  /* ── FOOTNOTE ── */
+  .footnote {
+    padding-top: 28px;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: start;
+    animation: fadeUp 0.6s ease 0.55s both;
+  }
+  .footnote-text { font-size: 10px; color: var(--rule-lt); line-height: 1.7; letter-spacing: 0.04em; }
+  .footnote-text strong { color: var(--slate); font-weight: 400; }
+  .footnote-brand { text-align: right; white-space: nowrap; }
+  .brand-name { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--gold); letter-spacing: -0.01em; }
+  .brand-sub { font-size: 8.5px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--slate); margin-top: 2px; }
+
+  /* ── INSIGHT BLOCK ── */
+  .insight-block {
+    background: var(--ink-mid);
+    border-left: 3px solid var(--teal);
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+  .insight-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    color: var(--cream-dim);
+    line-height: 1.6;
+    font-style: italic;
+  }
+  .insight-source { font-size: 9px; color: var(--slate); margin-top: 6px; letter-spacing: 0.1em; }
+
+  /* ── XRAY SECTION ── */
+  .xray-section { margin-bottom: 52px; animation: fadeUp 0.6s ease 0.3s both; }
+  .xray-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1px;
+    background: var(--rule);
+  }
+  .xray-card {
+    background: var(--ink-mid);
+    padding: 22px 18px;
+  }
+  .xray-card.is-hero {
+    background: linear-gradient(160deg, rgba(139,107,26,0.07) 0%, rgba(139,107,26,0.02) 100%);
+  }
+  .xray-tool-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .xray-card.is-hero .xray-tool-name { color: var(--gold); }
+  .xray-metric { margin-bottom: 14px; }
+  .xray-metric-label { font-size: 8.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--slate); margin-bottom: 4px; }
+  .xray-metric-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cream);
+  }
+  .xray-metric-value.gold { color: var(--gold); }
+  .xray-metric-value.teal { color: var(--teal); }
+  .xray-metric-value.amber { color: var(--amber); }
+  .xray-bar-mini { height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden; margin-top: 4px; }
+  .xray-bar-fill-mini { height: 100%; border-radius: 2px; }
+
+  /* ── DIFFICULTY INDICATOR ── */
+  .diff-level {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin-top: 4px;
+  }
+  .diff-block {
+    width: 8px; height: 10px;
+    background: var(--rule);
+    border-radius: 1px;
+  }
+  .diff-block.filled-1 { background: var(--teal); }
+  .diff-block.filled-2 { background: var(--gold); }
+  .diff-block.filled-3 { background: var(--amber); }
+
+  /* ── DIVIDER ── */
+  .rule-h { height: 1px; background: var(--rule); margin: 40px 0; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+/* ── GAP 8: MOBILE RESPONSIVE ── */
+@media (max-width: 768px) {
+  .page { padding: 28px 16px 48px; }
+
+  /* Masthead */
+  .masthead { grid-template-columns: 1fr; gap: 20px; }
+  .masthead-right { text-align: left; }
+  .main-title { font-size: clamp(26px, 7vw, 36px); }
+
+  /* Stakes + voice */
+  .stakes-bar { flex-direction: column; gap: 12px; }
+  .xts-voice { grid-template-columns: 1fr; }
+  .xts-voice-badge { writing-mode: horizontal-tb; transform: none; font-size: 9px; margin-bottom: 6px; }
+
+  /* Credentials */
+  .credentials-grid { grid-template-columns: 1fr; }
+  .cred-metrics { grid-template-columns: repeat(3, 1fr); }
+
+  /* Benchmark strip */
+  .benchmark-strip { grid-template-columns: 1fr 1fr; }
+
+  /* Data tables — collapse to stacked platform cards */
+  .tool-headers { display: none; }
+  .data-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-bottom: 2px solid var(--rule);
+    margin-bottom: 8px;
+  }
+  .row-label {
+    background: var(--ink-lt);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .row-label-text { font-size: 9px; }
+  .data-cell {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    position: relative;
+    padding-left: 110px;
+  }
+  .data-cell::before {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--rule-lt);
+    width: 90px;
+  }
+  .data-rows .data-cell:nth-child(2)::before { content: 'Claude'; }
+  .data-rows .data-cell:nth-child(3)::before { content: 'GH Copilot'; }
+  .data-rows .data-cell:nth-child(4)::before { content: 'MS Copilot'; }
+  .data-rows .data-cell:nth-child(5)::before { content: 'Gemini'; }
+  .data-rows .data-cell:nth-child(6)::before { content: 'Amazon Q'; }
+  .data-rows .data-cell:nth-child(7)::before { content: 'Codex'; }
+
+  /* Section headers */
+  .section-header { flex-wrap: wrap; gap: 8px; }
+  .section-rule { display: none; }
+
+  /* Xray grid */
+  .xray-grid { grid-template-columns: 1fr; }
+
+  /* Pros/cons */
+  .proscons-grid { grid-template-columns: 1fr; }
+
+  /* Velocity chart */
+  .vel-row { grid-template-columns: 1fr 50px; gap: 8px; flex-wrap: wrap; }
+  .vel-bar-wrap { grid-column: 1 / -1; padding: 0; }
+  .vel-note { display: none; }
+
+  /* Radar / attribute section */
+  .radar-grid { grid-template-columns: 1fr; }
+  .attr-label { font-size: 9px; width: 120px; }
+
+  /* Ranking strip */
+  .ranking-strip { grid-template-columns: 1fr 1fr; }
+
+  /* Verdict */
+  .verdict-grid { grid-template-columns: 1fr; }
+
+  /* Best fit */
+  .bestfit-grid { grid-template-columns: 1fr; }
+  .bestfit-toggle { flex-wrap: wrap; }
+
+  /* Assessment */
+  .q-card { padding: 24px 20px; }
+  .q-text { font-size: 17px; }
+  .q-options { grid-template-columns: 1fr; }
+  .result-grid { grid-template-columns: 1fr; }
+  .lead-form-grid { grid-template-columns: 1fr; }
+  .lead-capture { padding: 24px 20px; }
+
+  /* Sources */
+  .sources-bar { grid-template-columns: 1fr; }
+  .sources-label { writing-mode: horizontal-tb; transform: none; }
+
+  /* Footnote */
+  .footnote { grid-template-columns: 1fr; }
+
+  /* Reengagement */
+  .reengagement-bar { flex-direction: column; align-items: flex-start; }
+
+  /* PDF button */
+  .pdf-download-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+
+/* ── PDF DOWNLOAD BUTTON ── */
+.pdf-download-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: var(--ink-mid);
+  border: 1px solid var(--rule);
+  border-top: 2px solid var(--gold);
+  padding: 18px 28px;
+  margin-bottom: 36px;
+}
+.pdf-download-text {
+  font-size: 11px;
+  color: var(--cream-dim);
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+}
+.pdf-download-text strong { color: var(--cream); }
+.pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: var(--cream);
+  color: var(--ink);
+  border: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.pdf-btn:hover { background: var(--gold); color: #fff; }
+
+/* ── PDF DOWNLOAD OVERLAY ── */
+.pdf-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(26,26,42,0.75);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  animation: panelSlide 0.3s ease both;
+}
+.pdf-overlay.visible { display: flex; }
+.pdf-overlay-card {
+  background: var(--ink);
+  border-top: 3px solid var(--gold);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--gold);
+  padding: 40px 44px;
+  max-width: 480px;
+  width: 90%;
+  position: relative;
+  animation: panelSlide 0.35s ease both;
+}
+.pdf-overlay-dismiss {
+  position: absolute;
+  top: 14px; right: 18px;
+  font-size: 18px;
+  color: var(--rule-lt);
+  cursor: pointer;
+  background: none;
+  border: none;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.pdf-overlay-dismiss:hover { color: var(--cream); }
+.pdf-overlay-eyebrow {
+  font-size: 8.5px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.pdf-overlay-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+.pdf-overlay-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  color: var(--cream-dim);
+  line-height: 1.6;
+  margin-bottom: 22px;
+  font-weight: 300;
+  font-style: italic;
+}
+.pdf-overlay-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+.pdf-overlay-field label {
+  font-size: 8.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+.pdf-overlay-field input {
+  padding: 10px 14px;
+  border: 1px solid var(--rule);
+  background: var(--ink-mid);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--cream);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.pdf-overlay-field input:focus { border-color: var(--gold); }
+.pdf-overlay-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 14px 0;
+  padding: 10px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.pdf-overlay-check input[type="checkbox"] {
+  width: 14px; height: 14px;
+  margin-top: 2px;
+  accent-color: var(--gold);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.pdf-overlay-check label {
+  font-size: 11px;
+  color: var(--cream-dim);
+  line-height: 1.5;
+  cursor: pointer;
+}
+.pdf-overlay-check label strong { color: var(--cream); font-weight: 500; }
+.pdf-overlay-privacy {
+  font-size: 9px;
+  color: var(--rule-lt);
+  margin-bottom: 18px;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+.pdf-overlay-actions {
+  display: flex;
+  gap: 10px;
+}
+.pdf-overlay-submit {
+  flex: 1;
+  padding: 11px 20px;
+  background: var(--gold);
+  color: #fff;
+  border: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.pdf-overlay-submit:hover { background: var(--gold-lt); }
+.pdf-overlay-skip {
+  padding: 11px 16px;
+  background: transparent;
+  color: var(--slate);
+  border: 1px solid var(--rule);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.pdf-overlay-skip:hover { border-color: var(--slate); color: var(--cream); }
+
+/* ── PRINT STYLES ── */
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+  body { background: #fff !important; font-size: 11px; }
+  .page { padding: 20px 28px 28px; max-width: 100%; }
+
+  /* Hide interactive elements */
+  .pdf-download-bar,
+  .pdf-overlay,
+  .reengagement-bar,
+  .toggle-btn,
+  .bestfit-toggle,
+  .q-card,
+  .q-progress-wrap,
+  .assessment-section,
+  .detail-panel,
+  .expandable::after,
+  .q-btn,
+  .q-nav { display: none !important; }
+
+  /* Show all best fit cards regardless of toggle state */
+  .bestfit-view { display: block !important; }
+
+  /* Prevent awkward page breaks */
+  .comparison-section,
+  .proscons-section,
+  .velocity-section,
+  .radar-section,
+  .bestfit-section,
+  .credentials-section,
+  .verdict-section { page-break-inside: avoid; }
+
+  .proscons-card,
+  .bestfit-card,
+  .cred-card,
+  .bench-cell,
+  .xray-card { page-break-inside: avoid; }
+
+  /* Force page breaks before major sections */
+  .comparison-section:nth-of-type(3),
+  .proscons-section,
+  .bestfit-section,
+  .verdict-section { page-break-before: always; }
+
+  /* Flatten grids for print */
+  .proscons-grid { grid-template-columns: 1fr 1fr 1fr !important; }
+  .bestfit-grid { grid-template-columns: 1fr 1fr 1fr !important; }
+  .ranking-strip { grid-template-columns: repeat(6, 1fr) !important; }
+  .tool-headers,
+  .data-row { grid-template-columns: 140px repeat(6, 1fr) !important; }
+
+  /* Remove animations */
+  * { animation: none !important; transition: none !important; }
+
+  /* Header for each page */
+  .masthead { page-break-after: avoid; }
+
+  /* Stakes + voice compact in print */
+  .stakes-bar { border-left: 3px solid #8B6B1A; padding: 10px 14px; }
+  .xts-voice { padding: 14px 18px; }
+
+  /* Show assessment result if completed, hide form */
+  .lead-capture { display: none !important; }
+  .q-result.visible { display: block !important; }
+  .reengagement-bar { display: none !important; }
+
+  /* Footer on every page */
+  .footnote { page-break-before: always; }
+}
+
+
+<style>
+/* ═══════════════════════════════════════════════════════
+   CH1-6 ADDITIONS
+═══════════════════════════════════════════════════════ */
+
+/* ── CH1: 6th benchmark tile already handled by grid ── */
+
+/* ── CH2: EXPANDABLE DETAIL PANELS ── */
+.expandable { cursor: pointer; position: relative; }
+.expandable::after {
+  content: '›';
+  position: absolute;
+  top: 50%; right: 10px;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: var(--rule-lt);
+  transition: all 0.25s ease;
+  pointer-events: none;
+}
+.expandable:hover::after { color: var(--gold); transform: translateY(-50%) translateX(2px); }
+.expandable.open::after { transform: translateY(-50%) rotate(90deg); color: var(--gold); }
+
+.detail-panel {
+  display: none;
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #fafafa 0%, #f5f5fa 100%);
+  border-top: 2px solid var(--gold);
+  border-bottom: 1px solid var(--rule);
+  padding: 20px 28px;
+  animation: panelSlide 0.3s ease both;
+}
+.detail-panel.visible { display: block; }
+
+@keyframes panelSlide {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+.detail-col-label {
+  font-size: 8px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.detail-col-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  color: var(--cream-dim);
+  line-height: 1.6;
+  font-weight: 300;
+}
+.detail-col-text strong { color: var(--cream); font-weight: 600; font-style: normal; }
+.detail-xts {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--teal);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--rule);
+  letter-spacing: 0.05em;
+}
+
+/* Bench tile expandable */
+.bench-cell.expandable::after { top: 14px; transform: none; }
+.bench-cell.expandable.open::after { transform: rotate(90deg); }
+
+/* ── CH3: SOURCES BAR (bottom) ── */
+.sources-bar {
+  background: var(--ink-mid);
+  border: 1px solid var(--rule);
+  padding: 20px 28px;
+  margin-bottom: 32px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;
+}
+.sources-label {
+  font-size: 8.5px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  padding-top: 4px;
+}
+.sources-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.source-pill-link {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--slate);
+  background: var(--ink-lt);
+  border: 1px solid var(--rule);
+  padding: 4px 10px;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+.source-pill-link:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: rgba(139,107,26,0.05);
+  text-decoration: underline;
+}
+
+/* ── CH4: BEST FIT SECTION ── */
+.bestfit-section { margin-bottom: 52px; animation: fadeUp 0.6s ease 0.35s both; }
+
+.bestfit-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+.toggle-btn {
+  padding: 6px 16px;
+  border: 1px solid var(--rule);
+  background: var(--ink-lt);
+  color: var(--slate);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.toggle-btn.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #fff;
+}
+.toggle-btn:hover:not(.active) { border-color: var(--gold); color: var(--gold); }
+
+.bestfit-view { display: none; }
+.bestfit-view.active { display: block; }
+
+.bestfit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--rule);
+}
+.bestfit-card {
+  background: var(--ink-mid);
+  padding: 24px 20px;
+  transition: background 0.2s;
+}
+.bestfit-card:hover { background: var(--ghost2); }
+.bestfit-card.featured {
+  background: linear-gradient(160deg, rgba(139,107,26,0.08) 0%, rgba(139,107,26,0.03) 100%);
+  border-top: 2px solid var(--gold);
+}
+
+/* Problem-first card */
+.pain-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.3;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.pain-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  color: var(--cream-dim);
+  line-height: 1.6;
+  margin-bottom: 12px;
+  font-weight: 300;
+  font-style: italic;
+}
+.pain-profile {
+  font-size: 9.5px;
+  color: var(--slate);
+  margin-bottom: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
+.pain-rec {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-family: 'DM Mono', monospace;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pain-rec::before { content: '→'; }
+
+/* Platform-first card */
+.platform-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.platform-maker {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.platform-if {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+.platform-conditions {
+  list-style: none;
+  margin-bottom: 12px;
+}
+.platform-conditions li {
+  font-size: 11px;
+  color: var(--cream-dim);
+  padding: 4px 0 4px 14px;
+  position: relative;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  line-height: 1.5;
+}
+.platform-conditions li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-weight: 700;
+}
+.platform-why {
+  font-size: 10px;
+  color: var(--teal);
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+}
+
+/* ── CH5: ASSESSMENT + LEAD CAPTURE ── */
+.assessment-section {
+  margin-top: 60px;
+  border-top: 3px solid var(--gold);
+  padding-top: 48px;
+}
+.assessment-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.assessment-eyebrow::before { content: ''; display: block; width: 32px; height: 1px; background: var(--gold); }
+.assessment-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 900;
+  color: var(--cream);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+.assessment-title em { color: var(--gold); font-style: italic; }
+.assessment-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  color: var(--cream-dim);
+  font-weight: 300;
+  font-style: italic;
+  margin-bottom: 40px;
+  max-width: 680px;
+}
+
+/* Progress bar */
+.q-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.q-progress-track {
+  flex: 1;
+  height: 3px;
+  background: var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.q-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+  border-radius: 2px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+.q-progress-label {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--slate);
+  white-space: nowrap;
+}
+
+/* Question card */
+.q-card {
+  background: var(--ink-mid);
+  border: 1px solid var(--rule);
+  padding: 36px 40px;
+  margin-bottom: 0;
+  display: none;
+  animation: panelSlide 0.3s ease both;
+}
+.q-card.active { display: block; }
+.q-number {
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.q-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.3;
+  margin-bottom: 28px;
+  letter-spacing: -0.01em;
+}
+.q-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.q-option {
+  padding: 14px 18px;
+  border: 1px solid var(--rule);
+  background: var(--ink);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--cream-dim);
+  letter-spacing: 0.03em;
+  line-height: 1.4;
+  text-align: left;
+  position: relative;
+}
+.q-option:hover {
+  border-color: var(--gold);
+  background: rgba(139,107,26,0.04);
+  color: var(--cream);
+}
+.q-option.selected {
+  border-color: var(--gold);
+  background: rgba(139,107,26,0.08);
+  color: var(--cream);
+}
+.q-option.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 12px; right: 14px;
+  color: var(--gold);
+  font-size: 12px;
+}
+.q-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+}
+.q-btn {
+  padding: 10px 28px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+.q-btn-next {
+  background: var(--gold);
+  color: #fff;
+}
+.q-btn-next:hover { background: var(--gold-lt); }
+.q-btn-next:disabled { background: var(--rule); color: var(--slate); cursor: not-allowed; }
+.q-btn-back {
+  background: transparent;
+  color: var(--slate);
+  border: 1px solid var(--rule);
+}
+.q-btn-back:hover { border-color: var(--slate); color: var(--cream); }
+
+/* Result card */
+.q-result {
+  display: none;
+  animation: panelSlide 0.4s ease both;
+}
+.q-result.visible { display: block; }
+.result-header {
+  background: linear-gradient(135deg, #fdf8ec 0%, #f5edd0 100%);
+  border-top: 3px solid var(--gold);
+  padding: 36px 40px;
+  margin-bottom: 1px;
+}
+.result-eyebrow {
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.result-primary {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--cream);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+.result-rationale {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  color: var(--cream-dim);
+  line-height: 1.6;
+  font-weight: 300;
+  max-width: 640px;
+}
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--rule);
+  margin-bottom: 24px;
+}
+.result-cell {
+  background: var(--ink-mid);
+  padding: 24px 28px;
+}
+.result-cell.xts-cell {
+  background: linear-gradient(160deg, rgba(26,127,122,0.08) 0%, rgba(26,127,122,0.03) 100%);
+  border-top: 2px solid var(--teal);
+}
+.result-cell-label {
+  font-size: 8.5px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin-bottom: 10px;
+}
+.result-cell-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 6px;
+}
+.result-cell-value.good { color: var(--teal); }
+.result-cell-value.warn { color: var(--amber); }
+.result-cell-value.xts-col { color: var(--teal); }
+.result-cell-desc {
+  font-size: 10px;
+  color: var(--slate);
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+}
+
+/* Lead capture form */
+.lead-capture {
+  background: var(--ink-mid);
+  border: 1px solid var(--rule);
+  padding: 36px 40px;
+  margin-top: 24px;
+}
+.lead-capture-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+.lead-capture-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  color: var(--cream-dim);
+  line-height: 1.6;
+  margin-bottom: 28px;
+  font-weight: 300;
+  font-style: italic;
+}
+.lead-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.lead-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.lead-field label {
+  font-size: 8.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+.lead-field input, .lead-field select {
+  padding: 10px 14px;
+  border: 1px solid var(--rule);
+  background: var(--ink);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--cream);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.lead-field input:focus, .lead-field select:focus { border-color: var(--gold); }
+.lead-field select { cursor: pointer; }
+.lead-checkboxes { margin-bottom: 20px; }
+.lead-checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.lead-checkbox-row input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  accent-color: var(--gold);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.lead-checkbox-label {
+  font-size: 11px;
+  color: var(--cream-dim);
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+.lead-checkbox-label strong { color: var(--cream); font-weight: 500; }
+.lead-privacy {
+  font-size: 9.5px;
+  color: var(--rule-lt);
+  margin-bottom: 20px;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+.lead-submit {
+  background: var(--gold);
+  color: #fff;
+  border: none;
+  padding: 14px 36px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.lead-submit:hover { background: var(--gold-lt); }
+.lead-confirm {
+  display: none;
+  background: linear-gradient(135deg, rgba(26,127,122,0.06) 0%, rgba(26,127,122,0.02) 100%);
+  border: 1px solid var(--teal);
+  padding: 28px 32px;
+  margin-top: 16px;
+  animation: panelSlide 0.4s ease both;
+}
+.lead-confirm.visible { display: block; }
+.lead-confirm-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--teal);
+  margin-bottom: 10px;
+}
+.lead-confirm-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  color: var(--cream-dim);
+  line-height: 1.7;
+  font-weight: 300;
+  font-style: italic;
+}
+
+/* ── CH6: STAKES SETTER ── */
+.stakes-bar {
+  background: linear-gradient(135deg, rgba(139,107,26,0.06) 0%, rgba(26,127,122,0.04) 100%);
+  border-left: 3px solid var(--gold);
+  padding: 18px 24px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.stakes-icon { font-size: 20px; flex-shrink: 0; opacity: 0.7; }
+.stakes-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  color: var(--cream);
+  line-height: 1.5;
+  font-weight: 400;
+}
+.stakes-text strong { color: var(--gold); }
+
+/* ── CH6: XTS VOICE BLOCK ── */
+.xts-voice {
+  background: var(--ink-mid);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--teal);
+  padding: 24px 28px;
+  margin-bottom: 32px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;
+}
+.xts-voice-badge {
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--teal);
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  padding-top: 4px;
+}
+.xts-voice-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  color: var(--cream-dim);
+  line-height: 1.7;
+  font-weight: 300;
+}
+.xts-voice-text em { color: var(--cream); font-style: italic; }
+.xts-voice-attr {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--slate);
+  margin-top: 10px;
+  letter-spacing: 0.1em;
+}
+
+/* ── CH6: XTS CREDENTIALS STRIP ── */
+.credentials-section { margin-bottom: 52px; animation: fadeUp 0.6s ease 0.1s both; }
+.credentials-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--rule);
+}
+.cred-card {
+  background: var(--ink-mid);
+  padding: 28px 28px;
+}
+.cred-card.featured { background: linear-gradient(160deg, rgba(26,127,122,0.06) 0%, rgba(26,127,122,0.02) 100%); }
+.cred-eyebrow {
+  font-size: 8.5px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 6px;
+}
+.cred-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.cred-challenge {
+  font-size: 10.5px;
+  color: var(--slate);
+  line-height: 1.6;
+  margin-bottom: 16px;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+.cred-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.cred-metric {
+  background: var(--ink-lt);
+  padding: 10px 12px;
+  text-align: center;
+}
+.cred-metric-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.cred-metric-label {
+  font-size: 8.5px;
+  color: var(--slate);
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+.cred-stack {
+  font-size: 9px;
+  color: var(--rule-lt);
+  margin-top: 12px;
+  letter-spacing: 0.08em;
+}
+
+/* ── CH6: PULL QUOTES ── */
+.pull-quote {
+  border-left: 3px solid var(--gold);
+  padding: 20px 28px;
+  margin: 28px 0;
+  background: rgba(139,107,26,0.03);
+}
+.pull-quote-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: var(--cream);
+  line-height: 1.5;
+  font-style: italic;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+.pull-quote-source {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+/* ── CH6: RE-ENGAGEMENT BAR ── */
+.reengagement-bar {
+  background: var(--ink-mid);
+  border: 1px solid var(--rule);
+  padding: 18px 28px;
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.reengagement-text {
+  font-size: 11px;
+  color: var(--cream-dim);
+  letter-spacing: 0.03em;
+}
+.reengagement-text strong { color: var(--cream); }
+.reengagement-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.reeng-btn {
+  padding: 8px 18px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid var(--rule);
+  background: var(--ink);
+  color: var(--slate);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+.reeng-btn:hover { border-color: var(--gold); color: var(--gold); background: rgba(139,107,26,0.04); }
+.reeng-btn.primary { background: var(--gold); border-color: var(--gold); color: #fff; }
+.reeng-btn.primary:hover { background: var(--gold-lt); }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ── MASTHEAD ── -->
+<header class="masthead">
+  <div class="masthead-left">
+    <div class="eyebrow">Extended Competitive Intelligence Report</div>
+    <h1 class="main-title">AI Coding Assistants<br><em>Six-Platform Analysis · 2026</em></h1>
+    <p class="subtitle">Ten dimensions. Six platforms. Verified research. One framework for engineering leaders making AI investment decisions.</p>
+  </div>
+  <div class="masthead-right">
+    <div class="meta-block">
+      <strong>XTS AiForge</strong><br>
+      Intelligence Brief<br>
+      April 2026<br><br>
+      Platforms: <strong>6</strong><br>
+      Dimensions: <strong>10+</strong><br>
+      Research Sources: <strong>20+</strong>
+    </div>
+  </div>
+</header>
+
+<!-- ── CH6: STAKES SETTER ── -->
+<div class="stakes-bar">
+  <div class="stakes-icon">⚡</div>
+  <div class="stakes-text">
+    Engineering teams that standardise on the wrong AI coding platform in 2026 will spend <strong>18–24 months unwinding that decision</strong> — while competitors who got it right compound velocity gains every quarter. This brief exists to make that decision once, correctly.
+  </div>
+</div>
+
+<!-- ── CH6: XTS EXPERT VOICE ── -->
+<div class="xts-voice">
+  <div class="xts-voice-badge">XTS Perspective</div>
+  <div>
+    <div class="xts-voice-text">
+      At XTS, we have deployed AI coding tools and private LLM frameworks across enterprise engagements in MarTech, EdTech, and regulated industries across the US and Canada. The fusion of <em>MCP architecture and private LLMs</em> represents the next evolution in enterprise AI — where insights are contextual, conversations are secure, and intelligence becomes continuous. This analysis is not theoretical. It is grounded in what we have built, measured, and delivered.
+    </div>
+    <div class="xts-voice-attr">XTS AiForge Practice · Xponential Technology Services · xtsworld.com</div>
+  </div>
+</div>
+
+<!-- ── PDF DOWNLOAD BAR ── -->
+<div class="pdf-download-bar">
+  <div class="pdf-download-text"><strong>XTS AiForge Intelligence Brief 2026</strong> — Save a copy of this report for offline reference or to share with your team.</div>
+  <button class="pdf-btn" onclick="triggerPdfDownload()">&#11015; Download as PDF</button>
+</div>
+
+<!-- ── PDF OVERLAY ── -->
+<div class="pdf-overlay" id="pdf-overlay">
+  <div class="pdf-overlay-card">
+    <button class="pdf-overlay-dismiss" onclick="closePdfOverlay()">&#215;</button>
+    <div class="pdf-overlay-eyebrow">Your PDF is downloading</div>
+    <div class="pdf-overlay-title">Want us to keep you updated?</div>
+    <div class="pdf-overlay-sub">We refresh this report quarterly. Leave your email and we'll send the next edition — only when it's worth your time.</div>
+    <div class="pdf-overlay-field">
+      <label>First Name</label>
+      <input type="text" id="pdf-name" placeholder="Your first name">
+    </div>
+    <div class="pdf-overlay-field">
+      <label>Email Address</label>
+      <input type="email" id="pdf-email" placeholder="you@company.com">
+    </div>
+    <div class="pdf-overlay-check">
+      <input type="checkbox" id="pdf-cb-convo">
+      <label for="pdf-cb-convo"><strong>I'm also open to a conversation with XTS</strong> about how these platforms apply to my environment.</label>
+    </div>
+    <div class="pdf-overlay-privacy">Your details are shared only with XTS and never sold or shared with third parties. &middot; xtsworld.com</div>
+    <div class="pdf-overlay-actions">
+      <button class="pdf-overlay-submit" onclick="submitPdfLead()">Stay Updated &rarr;</button>
+      <button class="pdf-overlay-skip" onclick="closePdfOverlay()">No thanks</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── CH6: XTS CREDENTIALS STRIP ── -->
+<div class="credentials-section">
+  <div class="section-header">
+    <span class="section-num">— XTS —</span>
+    <h2 class="section-title">XTS AiForge in Production</h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="credentials-grid">
+    <div class="cred-card featured">
+      <div class="cred-eyebrow">Case Study · MarTech / Enterprise SaaS · USA</div>
+      <div class="cred-title">Private LLM &amp; MCP-Compatible Architecture</div>
+      <div class="cred-challenge">Challenge: Layer context-aware AI intelligence onto a mature analytics platform — integrating with Snowflake, AWS, and BI dashboards — without disrupting existing workflows. Required deep expertise in data context modelling, private LLM orchestration, and enterprise security.</div>
+      <div class="cred-metrics">
+        <div class="cred-metric">
+          <div class="cred-metric-value">MCP</div>
+          <div class="cred-metric-label">Native architecture deployed</div>
+        </div>
+        <div class="cred-metric">
+          <div class="cred-metric-value">Private</div>
+          <div class="cred-metric-label">LLM via Snowflake Cortex</div>
+        </div>
+        <div class="cred-metric">
+          <div class="cred-metric-value">Real-time</div>
+          <div class="cred-metric-label">Narrative-driven insights</div>
+        </div>
+      </div>
+      <div class="cred-stack">Stack: Snowflake · AWS NoSQL · LangChain · Fivetran · React / Node.js</div>
+    </div>
+    <div class="cred-card">
+      <div class="cred-eyebrow">Case Study · EdTech / Enterprise SaaS · Canada</div>
+      <div class="cred-title">AI-Driven Platform Modernisation &amp; Talent Augmentation</div>
+      <div class="cred-challenge">Challenge: Architectural constraints and skill gaps were slowing feature releases and compliance cycles for a fast-scaling AI learning platform. XTS co-owned modernisation using the AiForge framework — introducing intelligent ingestion, automated versioning, and real-time compliance validation.</div>
+      <div class="cred-metrics">
+        <div class="cred-metric">
+          <div class="cred-metric-value">98%</div>
+          <div class="cred-metric-label">Faster course creation</div>
+        </div>
+        <div class="cred-metric">
+          <div class="cred-metric-value">70%</div>
+          <div class="cred-metric-label">Quicker release timelines</div>
+        </div>
+        <div class="cred-metric">
+          <div class="cred-metric-value">35%</div>
+          <div class="cred-metric-label">Lower enhancement cost</div>
+        </div>
+      </div>
+      <div class="cred-stack">Stack: React · Python · AWS Lambda · DynamoDB · GPT-4o · Terraform</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CH1: BENCHMARK STRIP (6 tiles) ── -->
+<div class="benchmark-strip">
+  <div class="bench-cell expandable" data-panel="bench1">
+    <div class="bench-label">Claude Co-Work — SWE-bench</div>
+    <div class="bench-value">80.8%</div>
+    <div class="bench-sub">Highest verified score<br>any AI coding tool 2026</div>
+  </div>
+  <div class="bench-cell expandable" data-panel="bench2">
+    <div class="bench-label">GitHub Copilot — Task Speed</div>
+    <div class="bench-value">+55%</div>
+    <div class="bench-sub">Faster task completion<br>vs control (n=4,800)</div>
+  </div>
+  <div class="bench-cell expandable" data-panel="bench3">
+    <div class="bench-label">Developer AI Adoption</div>
+    <div class="bench-value">90%</div>
+    <div class="bench-sub">Now use ≥1 AI tool<br>at work (DORA 2025)</div>
+  </div>
+  <div class="bench-cell expandable" data-panel="bench4">
+    <div class="bench-label">Claude Code CSAT Score</div>
+    <div class="bench-value">91%</div>
+    <div class="bench-sub">Highest satisfaction score<br>any tool surveyed (JetBrains)</div>
+  </div>
+  <div class="bench-cell expandable" data-panel="bench5">
+    <div class="bench-label">Avg Velocity Gain (Enterprise)</div>
+    <div class="bench-value">26–30%</div>
+    <div class="bench-sub">Microsoft / Accenture study<br>across AI coding tools</div>
+  </div>
+  <div class="bench-cell expandable" data-panel="bench6">
+    <div class="bench-label">AI-Generated Code — Global Share</div>
+    <div class="bench-value">41%</div>
+    <div class="bench-sub">Of all code written globally<br>Stack Overflow 2025 · n=49,000+</div>
+  </div>
+  <!-- Detail panels for benchmark tiles -->
+  <div class="detail-panel" id="bench1">
+    <div class="detail-grid">
+      <div><div class="detail-col-label">Source &amp; Methodology</div><div class="detail-col-text">Anthropic official benchmarks, SWE-bench Verified leaderboard. <strong>SWE-bench tests real GitHub issues</strong> — 500 actual open-source bugs requiring codebase understanding, fix generation, and test passing. Verified by independent evaluators.</div></div>
+      <div><div class="detail-col-label">What this means</div><div class="detail-col-text">80.8% means Claude resolves <strong>4 in 5 real production bugs</strong> autonomously. The next closest tool scores 72.5%. On complex codebases, that 8-point gap translates to significantly fewer escalations to senior engineers.</div></div>
+      <div><div class="detail-col-label">XTS context</div><div class="detail-col-text xts-col">Claude Co-Work's SWE-bench leadership directly supports XTS's client delivery model — fewer iterations, higher first-time accuracy, and a measurable quality signal XTS can present to enterprise clients.</div></div>
+    </div>
+  </div>
+  <div class="detail-panel" id="bench2">
+    <div class="detail-grid">
+      <div><div class="detail-col-label">Source &amp; Methodology</div><div class="detail-col-text">GitHub/Microsoft Research, controlled experiment with <strong>4,800 professional developers</strong>. Treatment group had Copilot access; control group did not. Task: implement an HTTP server in JavaScript as quickly as possible. Published peer-reviewed.</div></div>
+      <div><div class="detail-col-label">Important caveat</div><div class="detail-col-text">This 55% figure applies to <strong>isolated, well-defined tasks</strong>. A 2025 METR randomised controlled trial found experienced developers were <strong>19% slower</strong> with AI tools on complex open-ended work — despite feeling 20% faster. Measure, don't assume.</div></div>
+      <div><div class="detail-col-label">XTS context</div><div class="detail-col-text xts-col">This is why the Lumen velocity measurement framework is non-negotiable. Published gains and actual gains diverge without measurement. XTS's competitive advantage is that we track the difference.</div></div>
+    </div>
+  </div>
+  <div class="detail-panel" id="bench3">
+    <div class="detail-grid">
+      <div><div class="detail-col-label">Source &amp; Methodology</div><div class="detail-col-text">Google DORA State of DevOps Report 2025. <strong>n≈5,000 respondents</strong> globally across engineering roles and company sizes. "Use" defined as using at least one AI tool at work regularly — weekly or more frequently.</div></div>
+      <div><div class="detail-col-label">What this means</div><div class="detail-col-text">AI coding adoption is now effectively <strong>universal in professional software development</strong>. The question is no longer whether to adopt — it is which tool to standardise on and how to govern it. Teams without a deliberate AI strategy are already behind.</div></div>
+      <div><div class="detail-col-label">XTS context</div><div class="detail-col-text xts-col">For XTS client engagements, this means prospective clients are almost certainly already using AI tools informally. The XTS value proposition is governance, measurement, and integration — not adoption itself.</div></div>
+    </div>
+  </div>
+  <div class="detail-panel" id="bench4">
+    <div class="detail-grid">
+      <div><div class="detail-col-label">Source &amp; Methodology</div><div class="detail-col-text">JetBrains AI Pulse Survey, January 2026. <strong>n=10,000+ professional developers</strong> worldwide, localised into 8 languages. CSAT (Customer Satisfaction Score) measured on a 0–100 scale. NPS (Net Promoter Score) of 54 also recorded — the highest of any tool surveyed.</div></div>
+      <div><div class="detail-col-label">What this means</div><div class="detail-col-text">91% CSAT is <strong>exceptionally high for a developer tool</strong>. GitHub Copilot, the market leader by volume, scores 78%. The 13-point gap reflects Claude Code's superior output quality on complex tasks — the tasks that senior developers spend most of their time on.</div></div>
+      <div><div class="detail-col-label">XTS context</div><div class="detail-col-text xts-col">High CSAT correlates with sustained adoption. XTS's engineering team using Claude Co-Work is less likely to revert to manual workflows — making velocity gains durable rather than temporary.</div></div>
+    </div>
+  </div>
+  <div class="detail-panel" id="bench5">
+    <div class="detail-grid">
+      <div><div class="detail-col-label">Source &amp; Methodology</div><div class="detail-col-text">Microsoft/Accenture joint study across enterprise AI coding tool deployments. Average across tools and team profiles. Individual tool studies show ranges from 10% (Google internal) to 55% (GitHub controlled experiment) depending on task type and measurement approach.</div></div>
+      <div><div class="detail-col-label">What this means</div><div class="detail-col-text">The <strong>26–30% enterprise average</strong> is the most defensible figure for business case purposes. At a $2,000/month engineer cost base, 30% velocity gain recovers ~$600/month in effective output value — the core of XTS's ROI argument for Claude Co-Work.</div></div>
+      <div><div class="detail-col-label">XTS context</div><div class="detail-col-text xts-col">XTS targets 30–50% velocity gain through Claude Co-Work on complex engineering tasks. The Lumen framework measures this monthly — turning a market average into a client-specific, evidenced number.</div></div>
+    </div>
+  </div>
+  <div class="detail-panel" id="bench6">
+    <div class="detail-grid">
+      <div><div class="detail-col-label">Source &amp; Methodology</div><div class="detail-col-text">Stack Overflow Developer Survey 2025. <strong>n=49,000+ respondents</strong> globally. Measures the percentage of production code that developers report was generated or substantially assisted by AI tools — including completions, generation, and agentic output.</div></div>
+      <div><div class="detail-col-label">What this means</div><div class="detail-col-text">Nearly <strong>half of all code being shipped today was written by AI</strong>. This is not an experiment — it is the new baseline. The question every engineering leader must answer is: who is governing the quality, security, and architectural coherence of that 41%?</div></div>
+      <div><div class="detail-col-label">XTS context</div><div class="detail-col-text xts-col">XTS's governance framework — token transparency, PR review gates, MCP-controlled context — is designed specifically for this reality. When 41% of your client's code is AI-generated, governance is not optional. It is the product.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 01 — PRICING & SUBSCRIPTION ── -->
+<div class="comparison-section">
+  <div class="section-header">
+    <span class="section-num">— 01 —</span>
+    <h2 class="section-title">Pricing &amp; Subscription Architecture</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="tool-headers">
+    <div class="th-spacer"></div>
+    <div class="tool-header is-hero">
+      <div class="hero-badge">Benchmark</div>
+      <div class="tool-name">Claude Co-Work</div>
+      <div class="tool-maker">Anthropic</div>
+    </div>
+    <div class="tool-header">
+      <div class="tool-name">GitHub Copilot</div>
+      <div class="tool-maker">Microsoft / GitHub</div>
+    </div>
+    <div class="tool-header">
+      <div class="tool-name">Microsoft Copilot</div>
+      <div class="tool-maker">Microsoft 365</div>
+    </div>
+    <div class="tool-header">
+      <div class="tool-name">Gemini Code Assist</div>
+      <div class="tool-maker">Google</div>
+    </div>
+    <div class="tool-header">
+      <div class="tool-name">Amazon Q Dev</div>
+      <div class="tool-maker">AWS</div>
+    </div>
+    <div class="tool-header">
+      <div class="tool-name">ChatGPT Codex</div>
+      <div class="tool-maker">OpenAI</div>
+    </div>
+  </div>
+
+  <div class="data-rows">
+
+    <div class="data-row">
+      <div class="row-label">
+        <div class="row-label-text">Individual / Pro</div>
+      </div>
+      <div class="data-cell is-hero">
+        <div class="cell-primary">$20/mo</div>
+        <div class="cell-secondary">Claude Pro · Max $100–200</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">$10/mo</div>
+        <div class="cell-secondary">Individual · Pro+ $39</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Free / $30</div>
+        <div class="cell-secondary">M365 Copilot add-on · Chat free</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Free</div>
+        <div class="cell-secondary">Individual tier · generous limits</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Free</div>
+        <div class="cell-secondary">Builder ID · no AWS acct needed</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">$20/mo</div>
+        <div class="cell-secondary">ChatGPT Plus · Pro $100–200</div>
+      </div>
+    </div>
+
+    <div class="data-row">
+      <div class="row-label">
+        <div class="row-label-text">Team / Business</div>
+      </div>
+      <div class="data-cell is-hero">
+        <div class="cell-primary">$100/seat</div>
+        <div class="cell-secondary">Team Premium tier</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">$19/seat</div>
+        <div class="cell-secondary">Business · Enterprise $39</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">$30/seat</div>
+        <div class="cell-secondary">M365 Copilot licence</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">$22/seat</div>
+        <div class="cell-secondary">Standard · Enterprise ~$50</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">$19/seat</div>
+        <div class="cell-secondary">Pro tier · all-in for AWS teams</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">$30/seat</div>
+        <div class="cell-secondary">Business · Enterprise credit pools</div>
+      </div>
+    </div>
+
+    <div class="data-row">
+      <div class="row-label">
+        <div class="row-label-text">Cost Model</div>
+        <div class="row-label-sub">predictability</div>
+      </div>
+      <div class="data-cell is-hero">
+        <div class="cell-primary">Token-based</div>
+        <div class="cell-secondary">Max plans = flat rate<br>API = pay-per-token (transparent)</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Flat subscription</div>
+        <div class="cell-secondary">Premium request multiplier applies<br>on advanced models</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Flat per-seat</div>
+        <div class="cell-secondary">Predictable · embedded in M365<br>No dev-specific billing</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Flat / API hybrid</div>
+        <div class="cell-secondary">Free individual tier · GCP cloud<br>spend may vary</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Flat Pro</div>
+        <div class="cell-secondary">1,000 agentic req/mo cap<br>Overage billing on Pro</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Credit-based</div>
+        <div class="cell-secondary">Usage-based per task<br>Business: credits beyond included limits</div>
+      </div>
+    </div>
+
+    <div class="data-row">
+      <div class="row-label">
+        <div class="row-label-text">Data / IP Policy</div>
+        <div class="row-label-sub">training opt-out</div>
+      </div>
+      <div class="data-cell is-hero">
+        <div class="cell-primary">No training</div>
+        <div class="cell-secondary">Team/Enterprise: zero code retention<br>Full IP indemnity on enterprise</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">No training</div>
+        <div class="cell-secondary">Business/Enterprise tiers<br>IP indemnity available</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">No training</div>
+        <div class="cell-secondary">Enterprise data protection<br>Microsoft Graph grounded</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Standard tier: opt-out</div>
+        <div class="cell-secondary">Enterprise: no retention<br>Requires GCP billing</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">No retention</div>
+        <div class="cell-secondary">SOC / HIPAA / PCI compliant<br>Strongest regulated-industry posture</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">No training (Business+)</div>
+        <div class="cell-secondary">Business/Enterprise: no data training<br>IP indemnity Enterprise tier</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── SECTION 02 — CORE CAPABILITY ── -->
+<div class="comparison-section">
+  <div class="section-header">
+    <span class="section-num">— 02 —</span>
+    <h2 class="section-title">Core Capability &amp; Context Depth</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="tool-headers">
+    <div class="th-spacer"></div>
+    <div class="tool-header is-hero"><div class="hero-badge">Benchmark</div><div class="tool-name">Claude Co-Work</div><div class="tool-maker">Anthropic</div></div>
+    <div class="tool-header"><div class="tool-name">GitHub Copilot</div><div class="tool-maker">Microsoft / GitHub</div></div>
+    <div class="tool-header"><div class="tool-name">Microsoft Copilot</div><div class="tool-maker">Microsoft 365</div></div>
+    <div class="tool-header"><div class="tool-name">Gemini Code Assist</div><div class="tool-maker">Google</div></div>
+    <div class="tool-header"><div class="tool-name">Amazon Q Dev</div><div class="tool-maker">AWS</div></div>
+    <div class="tool-header"><div class="tool-name">ChatGPT Codex</div><div class="tool-maker">OpenAI</div></div>
+  </div>
+
+  <div class="data-rows">
+
+    <div class="data-row">
+      <div class="row-label">
+        <div class="row-label-text">SWE-bench Score</div>
+        <div class="row-label-sub">real GitHub issues</div>
+      </div>
+      <div class="data-cell is-hero">
+        <div class="cell-primary">80.8%</div>
+        <div class="cell-secondary">Opus 4.6 · SWE-bench Verified<br>#1 all tools Mar 2026</div>
+        <div class="score-bar-wrap"><div class="score-bar"><div class="score-fill" style="width:80.8%"></div></div><div class="score-label">80.8 / 100</div></div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">72.5%</div>
+        <div class="cell-secondary">Claude Sonnet 4.6 backend<br>Agent mode</div>
+        <div class="score-bar-wrap"><div class="score-bar"><div class="score-fill" style="width:72.5%"></div></div><div class="score-label">72.5 / 100</div></div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">N/A</div>
+        <div class="cell-secondary">Not a code-native tool<br>GPT-4 powered general assistant</div>
+        <div class="score-bar-wrap"><div class="score-bar"><div class="score-fill" style="width:20%"></div></div><div class="score-label">Not benchmarked</div></div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">63.8%</div>
+        <div class="cell-secondary">Gemini 2.5 Pro backend<br>SWE-bench Verified</div>
+        <div class="score-bar-wrap"><div class="score-bar"><div class="score-fill" style="width:63.8%"></div></div><div class="score-label">63.8 / 100</div></div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">66%+</div>
+        <div class="cell-secondary">Claude Sonnet 4 backend<br>Highest on SWE-bench agentic</div>
+        <div class="score-bar-wrap"><div class="score-bar"><div class="score-fill" style="width:66%"></div></div><div class="score-label">66+ / 100</div></div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">~80%</div>
+        <div class="cell-secondary">GPT-5.3-Codex / GPT-5.4 backend<br>SWE-bench Verified Mar 2026</div>
+        <div class="score-bar-wrap"><div class="score-bar"><div class="score-fill" style="width:80%"></div></div><div class="score-label">~80 / 100</div></div>
+      </div>
+    </div>
+
+    <div class="data-row">
+      <div class="row-label">
+        <div class="row-label-text">Context Window</div>
+        <div class="row-label-sub">codebase awareness</div>
+      </div>
+      <div class="data-cell is-hero">
+        <div class="cell-primary">200K–1M</div>
+        <div class="cell-secondary">Sonnet default 200K<br>Opus 4.6 up to 1M tokens</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">128K</div>
+        <div class="cell-secondary">Workspace repo-level indexing<br>File-centric by default</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">~128K</div>
+        <div class="cell-secondary">Microsoft Graph grounded<br>Org data context, not code-focused</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">1M tokens</div>
+        <div class="cell-secondary">Gemini 2.5 Pro full codebase<br>Coherent multi-file refactor</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">200K+</div>
+        <div class="cell-secondary">Multi-file /dev agent<br>Deep AWS infra context</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">272K tokens</div>
+        <div class="cell-secondary">GPT-5.4 standard · 1M on Pro<br>Cloud sandboxed — repo preloaded</div>
+      </div>
+    </div>
+
+    <div class="data-row">
+      <div class="row-label">
+        <div class="row-label-text">Underlying Model</div>
+      </div>
+      <div class="data-cell is-hero">
+        <div class="cell-primary">Claude Opus 4.6</div>
+        <div class="cell-secondary">Anthropic-native<br>Safety-aligned, instruction-following</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Multi-model</div>
+        <div class="cell-secondary">GPT-5.4, Claude Sonnet 4.6,<br>Gemini 2.5 Pro — user selects</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">GPT-4 / Prometheus</div>
+        <div class="cell-secondary">Microsoft proprietary stack<br>Office + Graph integration</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Gemini 2.5 Pro/Flash</div>
+        <div class="cell-secondary">Google DeepMind<br>Multimodal, code-optimised</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Claude Sonnet 4</div>
+        <div class="cell-secondary">Anthropic model, AWS-wrapped<br>Fine-tuned on AWS patterns</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">GPT-5.3-Codex / GPT-5.4</div>
+        <div class="cell-secondary">OpenAI o3-derived, RL-trained<br>Real-world coding tasks focus</div>
+      </div>
+    </div>
+
+    <div class="data-row">
+      <div class="row-label">
+        <div class="row-label-text">Agentic Capability</div>
+        <div class="row-label-sub">autonomous multi-step</div>
+      </div>
+      <div class="data-cell is-hero">
+        <div class="cell-primary">Elite</div>
+        <div class="cell-secondary">Multi-hour autonomous sessions<br>MCP native · Agent Teams</div>
+        <div class="rank-badge r1">1</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Strong</div>
+        <div class="cell-secondary">Agent Mode, Workspace<br>Copilot assigns issues autonomously</div>
+        <div class="rank-badge r2">2</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Moderate</div>
+        <div class="cell-secondary">Copilot Actions in beta<br>Primarily productivity automation</div>
+        <div class="rank-badge">4</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Strong</div>
+        <div class="cell-secondary">Agent mode (Oct 2025)<br>Multi-file edits, MCP support</div>
+        <div class="rank-badge r2">3</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Strong (AWS)</div>
+        <div class="cell-secondary">/dev, /doc, /review agents<br>Java transform agent mature</div>
+        <div class="rank-badge">3</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Elite</div>
+        <div class="cell-secondary">Cloud sandbox multi-task parallel<br>Automations: CI/CD, issue triage</div>
+        <div class="rank-badge r2">2</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── SECTION 03 — EASE OF USE & PROMPT REQUIREMENTS ── -->
+<div class="xray-section">
+  <div class="section-header">
+    <span class="section-num">— 03 —</span>
+    <h2 class="section-title">Ease of Use · Prompt Specificity · Instruction Complexity</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="xray-grid">
+
+    <div class="xray-card is-hero">
+      <div class="xray-tool-name">Claude Co-Work <span style="font-size:10px;color:var(--slate);font-weight:400;font-family:'DM Mono',monospace">Anthropic</span></div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Ease of First Use</div>
+        <div class="xray-metric-value gold">Moderate</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-claude" style="width:65%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Prompt Specificity Required</div>
+        <div class="xray-metric-value">Medium–High</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-claude" style="width:70%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Use-case Detail Needed</div>
+        <div class="xray-metric-value amber">Detailed context</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-claude" style="width:75%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Setup Complexity</div>
+        <div class="xray-metric-value">Medium (CLI / IDE ext)</div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Onboarding Time (to value)</div>
+        <div class="xray-metric-value gold">1–3 days</div>
+      </div>
+      <div style="font-size:10px;color:var(--cream-dim);margin-top:10px;line-height:1.6;font-family:'Cormorant Garamond',serif;font-style:italic">
+        Rewards detailed prompts and system-level instructions. Complexity pays off with production-grade output. Terminal-native interface suits senior engineers more than juniors.
+      </div>
+    </div>
+
+    <div class="xray-card">
+      <div class="xray-tool-name">GitHub Copilot <span style="font-size:10px;color:var(--slate);font-weight:400;font-family:'DM Mono',monospace">Microsoft</span></div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Ease of First Use</div>
+        <div class="xray-metric-value teal">Very High</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-github" style="width:95%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Prompt Specificity Required</div>
+        <div class="xray-metric-value">Low–Medium</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-github" style="width:35%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Use-case Detail Needed</div>
+        <div class="xray-metric-value teal">Minimal</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-github" style="width:30%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Setup Complexity</div>
+        <div class="xray-metric-value">Very Low (IDE extension)</div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Onboarding Time (to value)</div>
+        <div class="xray-metric-value">Same day (81.4% install → use)</div>
+      </div>
+      <div style="font-size:10px;color:var(--cream-dim);margin-top:10px;line-height:1.6;font-family:'Cormorant Garamond',serif;font-style:italic">
+        Best-in-class onboarding. 96% of new users accept suggestions same day. Inline completions work with minimal instruction. Less powerful for architectural complexity.
+      </div>
+    </div>
+
+    <div class="xray-card">
+      <div class="xray-tool-name">Microsoft Copilot <span style="font-size:10px;color:var(--slate);font-weight:400;font-family:'DM Mono',monospace">M365</span></div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Ease of First Use</div>
+        <div class="xray-metric-value teal">High</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-msft" style="width:85%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Prompt Specificity Required</div>
+        <div class="xray-metric-value">Low (conversational)</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-msft" style="width:25%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Use-case Detail Needed</div>
+        <div class="xray-metric-value amber">Medium (not code-native)</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-msft" style="width:50%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Setup Complexity</div>
+        <div class="xray-metric-value">Low (M365 add-on)</div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Onboarding Time (to value)</div>
+        <div class="xray-metric-value">Hours for office tasks</div>
+      </div>
+      <div style="font-size:10px;color:var(--cream-dim);margin-top:10px;line-height:1.6;font-family:'Cormorant Garamond',serif;font-style:italic">
+        Not a coding-native tool. Designed for Office productivity, meetings, docs. Code support is secondary. Developers prefer GitHub Copilot; 76% switch to ChatGPT over M365 Copilot when given a choice.
+      </div>
+    </div>
+
+    <div class="xray-card">
+      <div class="xray-tool-name">Gemini Code Assist <span style="font-size:10px;color:var(--slate);font-weight:400;font-family:'DM Mono',monospace">Google</span></div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Ease of First Use</div>
+        <div class="xray-metric-value teal">High</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-gemini" style="width:80%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Prompt Specificity Required</div>
+        <div class="xray-metric-value">Medium</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-gemini" style="width:45%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Use-case Detail Needed</div>
+        <div class="xray-metric-value">Medium (GCP context helps)</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-gemini" style="width:50%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Setup Complexity</div>
+        <div class="xray-metric-value">Medium (GCP project + IAM)</div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Onboarding Time (to value)</div>
+        <div class="xray-metric-value">~15 min to first use</div>
+      </div>
+      <div style="font-size:10px;color:var(--cream-dim);margin-top:10px;line-height:1.6;font-family:'Cormorant Garamond',serif;font-style:italic">
+        Intuitive on GCP stacks. Users describe as "transformative for general workflows." Enterprise Context mode grounds responses in org-specific APIs. 31% less context-switching vs docs.
+      </div>
+    </div>
+
+    <div class="xray-card">
+      <div class="xray-tool-name">Amazon Q Dev <span style="font-size:10px;color:var(--slate);font-weight:400;font-family:'DM Mono',monospace">AWS</span></div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Ease of First Use</div>
+        <div class="xray-metric-value teal">High (AWS teams)</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-amazonq" style="width:80%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Prompt Specificity Required</div>
+        <div class="xray-metric-value">Low on AWS tasks</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-amazonq" style="width:30%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Use-case Detail Needed</div>
+        <div class="xray-metric-value teal">Minimal (AWS-native)</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-amazonq" style="width:25%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Setup Complexity</div>
+        <div class="xray-metric-value">Very Low (~5 min Builder ID)</div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Onboarding Time (to value)</div>
+        <div class="xray-metric-value">Same day for AWS engineers</div>
+      </div>
+      <div style="font-size:10px;color:var(--cream-dim);margin-top:10px;line-height:1.6;font-family:'Cormorant Garamond',serif;font-style:italic">
+        Fine-tuned on 20+ years of AWS best practices. Extraordinary ROI on Lambda, S3, CDK, IaC. Almost no prompting needed for standard AWS patterns — the model knows the domain.
+      </div>
+    </div>
+
+    <div class="xray-card">
+      <div class="xray-tool-name">ChatGPT Codex <span style="font-size:10px;color:var(--slate);font-weight:400;font-family:'DM Mono',monospace">OpenAI</span></div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Ease of First Use</div>
+        <div class="xray-metric-value teal">High</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-openai" style="width:82%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Prompt Specificity Required</div>
+        <div class="xray-metric-value">Medium</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-openai" style="width:50%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Use-case Detail Needed</div>
+        <div class="xray-metric-value">Medium (task delegation)</div>
+        <div class="xray-bar-mini"><div class="xray-bar-fill-mini c-openai" style="width:55%"></div></div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Setup Complexity</div>
+        <div class="xray-metric-value">Low (ChatGPT sidebar)</div>
+      </div>
+      <div class="xray-metric">
+        <div class="xray-metric-label">Onboarding Time (to value)</div>
+        <div class="xray-metric-value">Hours — familiar ChatGPT UX</div>
+      </div>
+      <div style="font-size:10px;color:var(--cream-dim);margin-top:10px;line-height:1.6;font-family:'Cormorant Garamond',serif;font-style:italic">
+        Asynchronous task model — assign and return. Familiar ChatGPT interface lowers the learning curve. AGENTS.md file steers behaviour at scale. 4× more token-efficient than Claude Code per OpenAI claims. Best for parallel workload delegation.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── SECTION 04 — INTEGRATION & CODE ASSIMILATION ── -->
+<div class="comparison-section">
+  <div class="section-header">
+    <span class="section-num">— 04 —</span>
+    <h2 class="section-title">Integration Readiness &amp; Human Engineering Effort to Assimilate</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="tool-headers">
+    <div class="th-spacer"></div>
+    <div class="tool-header is-hero"><div class="hero-badge">Benchmark</div><div class="tool-name">Claude Co-Work</div><div class="tool-maker">Anthropic</div></div>
+    <div class="tool-header"><div class="tool-name">GitHub Copilot</div><div class="tool-maker">Microsoft / GitHub</div></div>
+    <div class="tool-header"><div class="tool-name">Microsoft Copilot</div><div class="tool-maker">Microsoft 365</div></div>
+    <div class="tool-header"><div class="tool-name">Gemini Code Assist</div><div class="tool-maker">Google</div></div>
+    <div class="tool-header"><div class="tool-name">Amazon Q Dev</div><div class="tool-maker">AWS</div></div>
+    <div class="tool-header"><div class="tool-name">ChatGPT Codex</div><div class="tool-maker">OpenAI</div></div>
+  </div>
+
+  <div class="data-rows">
+
+    <div class="data-row">
+      <div class="row-label">
+        <div class="row-label-text">Code Acceptance Rate</div>
+        <div class="row-label-sub">% of output kept</div>
+      </div>
+      <div class="data-cell is-hero">
+        <div class="cell-primary">88–92%</div>
+        <div class="cell-secondary">First-try production-ready<br>Blind test: 67% win rate</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">27–30%</div>
+        <div class="cell-secondary">Suggestion rate 46%<br>88% of accepted code retained</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">~15–25%</div>
+        <div class="cell-secondary">Code is secondary output<br>Review always required</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">~35%</div>
+        <div class="cell-secondary">Strong GCP-native code quality<br>Context citation improves trust</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">~40–45%</div>
+        <div class="cell-secondary">High on AWS stacks<br>27% fewer deployment rollbacks</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">~70%</div>
+        <div class="cell-secondary">70.2% accuracy multi-retry<br>37% first attempt · CI-verified output</div>
+      </div>
+    </div>
+
+    <div class="data-row">
+      <div class="row-label">
+        <div class="row-label-text">Human Review Effort</div>
+        <div class="row-label-sub">manual revision load</div>
+      </div>
+      <div class="data-cell is-hero">
+        <div class="cell-primary">Low–Medium</div>
+        <div class="cell-secondary">~2 fewer manual iteration cycles<br>per task vs alternatives</div>
+        <div class="diff-level"><div class="diff-block filled-1"></div><div class="diff-block filled-1"></div><div class="diff-block"></div><div class="diff-block"></div><div class="diff-block"></div></div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Medium</div>
+        <div class="cell-secondary">Inline completions fast to review<br>Agent mode output needs QA</div>
+        <div class="diff-level"><div class="diff-block filled-2"></div><div class="diff-block filled-2"></div><div class="diff-block filled-2"></div><div class="diff-block"></div><div class="diff-block"></div></div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">High</div>
+        <div class="cell-secondary">Not production-code focused<br>Always needs dev translation</div>
+        <div class="diff-level"><div class="diff-block filled-3"></div><div class="diff-block filled-3"></div><div class="diff-block filled-3"></div><div class="diff-block filled-3"></div><div class="diff-block"></div></div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Medium</div>
+        <div class="cell-secondary">Context citations help verification<br>Next Edit Predictions reduce cycles</div>
+        <div class="diff-level"><div class="diff-block filled-2"></div><div class="diff-block filled-2"></div><div class="diff-block filled-2"></div><div class="diff-block"></div><div class="diff-block"></div></div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Low (AWS), Med (others)</div>
+        <div class="cell-secondary">AWS patterns near production-ready<br>IP indemnity reduces legal review</div>
+        <div class="diff-level"><div class="diff-block filled-1"></div><div class="diff-block filled-1"></div><div class="diff-block"></div><div class="diff-block"></div><div class="diff-block"></div></div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Medium</div>
+        <div class="cell-secondary">Terminal logs + test outputs verifiable<br>PR format aids review workflow</div>
+        <div class="diff-level"><div class="diff-block filled-2"></div><div class="diff-block filled-2"></div><div class="diff-block filled-2"></div><div class="diff-block"></div><div class="diff-block"></div></div>
+      </div>
+    </div>
+
+    <div class="data-row">
+      <div class="row-label">
+        <div class="row-label-text">Multi-file Coherence</div>
+        <div class="row-label-sub">cross-module integrity</div>
+      </div>
+      <div class="data-cell is-hero">
+        <div class="cell-primary">Elite</div>
+        <div class="cell-secondary">30+ files in single coherent op<br>1M token whole-repo context</div>
+        <div class="rank-badge r1">1</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Strong</div>
+        <div class="cell-secondary">Workspace repo indexing<br>Cross-module dep awareness</div>
+        <div class="rank-badge r2">2</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">N/A</div>
+        <div class="cell-secondary">Not a code-file tool<br>No repo indexing</div>
+        <div class="rank-badge">5</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Strong</div>
+        <div class="cell-secondary">1M token entire codebase<br>Dependency resolution 40% faster</div>
+        <div class="rank-badge r2">3</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Good (AWS scope)</div>
+        <div class="cell-secondary">Multi-file /dev agent<br>Limited to 15K lines optimally</div>
+        <div class="rank-badge">4</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Strong</div>
+        <div class="cell-secondary">Cloud sandbox full-repo context<br>Each task independent environment</div>
+        <div class="rank-badge r2">3</div>
+      </div>
+    </div>
+
+    <div class="data-row">
+      <div class="row-label">
+        <div class="row-label-text">MCP / Tool Integration</div>
+        <div class="row-label-sub">ecosystem connectivity</div>
+      </div>
+      <div class="data-cell is-hero">
+        <div class="cell-primary">Native MCP</div>
+        <div class="cell-secondary">Full MCP protocol support<br>AiForge / Meridian / Lumen native</div>
+        <div class="rank-badge r1">1</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">MCP + Extensions</div>
+        <div class="cell-secondary">Jira, Slack, Azure Boards, Teams<br>Extension marketplace mature</div>
+        <div class="rank-badge r2">2</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">M365 ecosystem</div>
+        <div class="cell-secondary">Deep Office / Teams / SharePoint<br>No native code toolchain</div>
+        <div class="rank-badge">4</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">GCP + MCP (2025)</div>
+        <div class="cell-secondary">Firebase, BigQuery, Apigee native<br>MCP support added Oct 2025</div>
+        <div class="rank-badge">3</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">AWS + MCP IDE</div>
+        <div class="cell-secondary">IAM, Lambda, CloudFormation native<br>MCP IDE integration Jun 2026</div>
+        <div class="rank-badge">3</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">MCP + Automations</div>
+        <div class="cell-secondary">MCP servers in Codex sessions<br>CI/CD pipeline native integration</div>
+        <div class="rank-badge r2">2</div>
+      </div>
+    </div>
+
+    <div class="data-row">
+      <div class="row-label">
+        <div class="row-label-text">Security of Gen. Code</div>
+        <div class="row-label-sub">vulnerability rate</div>
+      </div>
+      <div class="data-cell is-hero">
+        <div class="cell-primary">Lower (architecture)</div>
+        <div class="cell-secondary">Full-context generation reduces<br>inconsistent security patterns</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">40% flagged</div>
+        <div class="cell-secondary">40% of generated programs<br>flagged for insecure code (research)</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Variable</div>
+        <div class="cell-secondary">Not code-generation primary<br>EchoLeak vuln patched Jun 2025</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Citation-aided</div>
+        <div class="cell-secondary">Source citations help audit<br>GCP RCE bug patched Jul 2025</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Best compliance posture</div>
+        <div class="cell-secondary">SOC/HIPAA/PCI · IP indemnity<br>Built-in security scanning Pro</div>
+      </div>
+      <div class="data-cell">
+        <div class="cell-primary">Variable</div>
+        <div class="cell-secondary">Sandboxed execution reduces risk<br>Code Review catches critical bugs</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── SECTION 05 — VELOCITY ANALYSIS ── -->
+<div class="velocity-section">
+  <div class="section-header">
+    <span class="section-num">— 05 —</span>
+    <h2 class="section-title">Expected Velocity Gain — Research-Verified</h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="velocity-chart">
+    <div class="vel-row header-row">
+      <div class="vel-header-label">Platform</div>
+      <div class="vel-header-label">SWE-bench</div>
+      <div class="vel-header-label" style="padding-left:20px">Documented Velocity Gain</div>
+      <div class="vel-header-label" style="text-align:right;padding-right:16px">Range</div>
+      <div class="vel-header-label">Source / Caveat</div>
+    </div>
+    <div class="vel-row">
+      <div class="vel-tool hero">Claude Co-Work</div>
+      <div class="vel-swe hero">80.8%</div>
+      <div class="vel-bar-wrap"><div class="vel-bar-track"><div class="vel-bar-fill hero-fill" style="width:75%"></div></div></div>
+      <div class="vel-gain hero">30–50%</div>
+      <div class="vel-note hero">XTS Lumen framework · complex eng tasks<br>Highest on reasoning-heavy work</div>
+    </div>
+    <div class="vel-row">
+      <div class="vel-tool">GitHub Copilot</div>
+      <div class="vel-swe">72.5%</div>
+      <div class="vel-bar-wrap"><div class="vel-bar-track"><div class="vel-bar-fill teal-fill" style="width:70%"></div></div></div>
+      <div class="vel-gain">26–55%</div>
+      <div class="vel-note">GitHub/Accenture study n=4,800<br>55% on isolated tasks; 26% enterprise avg</div>
+    </div>
+    <div class="vel-row">
+      <div class="vel-tool">Microsoft Copilot</div>
+      <div class="vel-swe" style="color:var(--slate)">N/A</div>
+      <div class="vel-bar-wrap"><div class="vel-bar-track"><div class="vel-bar-fill" style="width:25%;background:var(--rule-lt)"></div></div></div>
+      <div class="vel-gain" style="color:var(--slate)">~10–15%</div>
+      <div class="vel-note">Office productivity (docs, email, meetings)<br>Not applicable to code velocity</div>
+    </div>
+    <div class="vel-row">
+      <div class="vel-tool">Gemini Code Assist</div>
+      <div class="vel-swe">63.8%</div>
+      <div class="vel-bar-wrap"><div class="vel-bar-track"><div class="vel-bar-fill" style="width:50%;background:var(--teal);opacity:0.6"></div></div></div>
+      <div class="vel-gain">~20–31%</div>
+      <div class="vel-note">Google internal research 2025<br>31% less context-switch; 40% faster dep resolve</div>
+    </div>
+    <div class="vel-row">
+      <div class="vel-tool">Amazon Q Dev</div>
+      <div class="vel-swe">66%+</div>
+      <div class="vel-bar-wrap"><div class="vel-bar-track"><div class="vel-bar-fill" style="width:45%;background:var(--amber);opacity:0.7"></div></div></div>
+      <div class="vel-gain">~25–35%</div>
+      <div class="vel-note">AWS-native tasks; 27% fewer rollbacks<br>Lower on non-AWS stacks</div>
+    </div>
+    <div class="vel-row">
+      <div class="vel-tool">ChatGPT Codex</div>
+      <div class="vel-swe">~80%</div>
+      <div class="vel-bar-wrap"><div class="vel-bar-track"><div class="vel-bar-fill" style="width:62%;background:var(--openai)"></div></div></div>
+      <div class="vel-gain">2–3× tasks/day</div>
+      <div class="vel-note">Duolingo: 67% faster PR turnaround, 70% more PRs<br>Cisco: 50% reduction in code review times</div>
+    </div>
+
+    <div class="insight-block" style="margin-top:20px">
+      <div class="insight-text">"Developers complete coding tasks 55% faster using GitHub Copilot — but a 2025 METR randomised controlled trial found experienced open-source developers were 19% <em>slower</em> with AI tools despite feeling 20% faster. The productivity gap between perceived and measured gains remains the most under-audited risk in enterprise AI adoption."</div>
+      <div class="insight-source">Sources: Microsoft Research (2023), METR RCT (2025), Jellyfish State of Engineering Management (2025)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 06 — ATTRIBUTE COMPARISON ── -->
+<div class="radar-section">
+  <div class="section-header">
+    <span class="section-num">— 06 —</span>
+    <h2 class="section-title">Multi-Dimension Attribute Comparison</h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="radar-grid">
+    <div class="radar-card">
+      <div class="radar-title">Developer Experience &amp; <span>Satisfaction</span> Dimensions</div>
+      <table class="attr-table">
+        <tr class="attr-row">
+          <td class="attr-label">Developer CSAT</td>
+          <td class="attr-bars">
+            <div class="attr-bar-row"><span class="attr-tool-tag">Claude</span><div class="attr-bar-track"><div class="attr-bar-fill c-claude" style="width:91%"></div></div><span class="attr-score-tag">91%</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">GH Copilot</span><div class="attr-bar-track"><div class="attr-bar-fill c-github" style="width:78%"></div></div><span class="attr-score-tag">78%</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">MS Copilot</span><div class="attr-bar-track"><div class="attr-bar-fill c-msft" style="width:52%"></div></div><span class="attr-score-tag">52%</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Gemini</span><div class="attr-bar-track"><div class="attr-bar-fill c-gemini" style="width:68%"></div></div><span class="attr-score-tag">68%</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Amazon Q</span><div class="attr-bar-track"><div class="attr-bar-fill c-amazonq" style="width:62%"></div></div><span class="attr-score-tag">62%</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Codex</span><div class="attr-bar-track"><div class="attr-bar-fill c-openai" style="width:74%"></div></div><span class="attr-score-tag">74%</span></div>
+          </td>
+        </tr>
+        <tr class="attr-row">
+          <td class="attr-label">IDE Coverage</td>
+          <td class="attr-bars">
+            <div class="attr-bar-row"><span class="attr-tool-tag">Claude</span><div class="attr-bar-track"><div class="attr-bar-fill c-claude" style="width:70%"></div></div><span class="attr-score-tag">VSCode+</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">GH Copilot</span><div class="attr-bar-track"><div class="attr-bar-fill c-github" style="width:100%"></div></div><span class="attr-score-tag">All IDEs</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">MS Copilot</span><div class="attr-bar-track"><div class="attr-bar-fill c-msft" style="width:40%"></div></div><span class="attr-score-tag">Office only</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Gemini</span><div class="attr-bar-track"><div class="attr-bar-fill c-gemini" style="width:75%"></div></div><span class="attr-score-tag">Major IDEs</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Amazon Q</span><div class="attr-bar-track"><div class="attr-bar-fill c-amazonq" style="width:65%"></div></div><span class="attr-score-tag">VS/JB/Ecl</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Codex</span><div class="attr-bar-track"><div class="attr-bar-fill c-openai" style="width:55%"></div></div><span class="attr-score-tag">Web+CLI</span></div>
+          </td>
+        </tr>
+        <tr class="attr-row">
+          <td class="attr-label">Market Share</td>
+          <td class="attr-bars">
+            <div class="attr-bar-row"><span class="attr-tool-tag">Claude</span><div class="attr-bar-track"><div class="attr-bar-fill c-claude" style="width:18%"></div></div><span class="attr-score-tag">18% wkpl</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">GH Copilot</span><div class="attr-bar-track"><div class="attr-bar-fill c-github" style="width:68%"></div></div><span class="attr-score-tag">68% devs</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">MS Copilot</span><div class="attr-bar-track"><div class="attr-bar-fill c-msft" style="width:12%"></div></div><span class="attr-score-tag">11.5% paid</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Gemini</span><div class="attr-bar-track"><div class="attr-bar-fill c-gemini" style="width:47%"></div></div><span class="attr-score-tag">47% devs</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Amazon Q</span><div class="attr-bar-track"><div class="attr-bar-fill c-amazonq" style="width:4%"></div></div><span class="attr-score-tag">~4% devs</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Codex</span><div class="attr-bar-track"><div class="attr-bar-fill c-openai" style="width:30%"></div></div><span class="attr-score-tag">~30% devs</span></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="radar-card">
+      <div class="radar-title">Enterprise &amp; <span>Governance</span> Dimensions</div>
+      <table class="attr-table">
+        <tr class="attr-row">
+          <td class="attr-label">Governance Maturity</td>
+          <td class="attr-bars">
+            <div class="attr-bar-row"><span class="attr-tool-tag">Claude</span><div class="attr-bar-track"><div class="attr-bar-fill c-claude" style="width:92%"></div></div><span class="attr-score-tag">Elite</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">GH Copilot</span><div class="attr-bar-track"><div class="attr-bar-fill c-github" style="width:82%"></div></div><span class="attr-score-tag">Strong</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">MS Copilot</span><div class="attr-bar-track"><div class="attr-bar-fill c-msft" style="width:88%"></div></div><span class="attr-score-tag">Strong</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Gemini</span><div class="attr-bar-track"><div class="attr-bar-fill c-gemini" style="width:72%"></div></div><span class="attr-score-tag">Good</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Amazon Q</span><div class="attr-bar-track"><div class="attr-bar-fill c-amazonq" style="width:95%"></div></div><span class="attr-score-tag">Best</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Codex</span><div class="attr-bar-track"><div class="attr-bar-fill c-openai" style="width:75%"></div></div><span class="attr-score-tag">Strong</span></div>
+          </td>
+        </tr>
+        <tr class="attr-row">
+          <td class="attr-label">Compliance Certs</td>
+          <td class="attr-bars">
+            <div class="attr-bar-row"><span class="attr-tool-tag">Claude</span><div class="attr-bar-track"><div class="attr-bar-fill c-claude" style="width:80%"></div></div><span class="attr-score-tag">SOC2 / ISO</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">GH Copilot</span><div class="attr-bar-track"><div class="attr-bar-fill c-github" style="width:80%"></div></div><span class="attr-score-tag">SOC2 / ISO</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">MS Copilot</span><div class="attr-bar-track"><div class="attr-bar-fill c-msft" style="width:95%"></div></div><span class="attr-score-tag">DoD cloud</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Gemini</span><div class="attr-bar-track"><div class="attr-bar-fill c-gemini" style="width:75%"></div></div><span class="attr-score-tag">HIPAA/ISO</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Amazon Q</span><div class="attr-bar-track"><div class="attr-bar-fill c-amazonq" style="width:100%"></div></div><span class="attr-score-tag">SOC/HIPAA/PCI</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Codex</span><div class="attr-bar-track"><div class="attr-bar-fill c-openai" style="width:75%"></div></div><span class="attr-score-tag">SOC2/ISO</span></div>
+          </td>
+        </tr>
+        <tr class="attr-row">
+          <td class="attr-label">Ecosystem Lock-in Risk</td>
+          <td class="attr-bars">
+            <div class="attr-bar-row"><span class="attr-tool-tag">Claude</span><div class="attr-bar-track"><div class="attr-bar-fill c-claude" style="width:35%"></div></div><span class="attr-score-tag">Low</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">GH Copilot</span><div class="attr-bar-track"><div class="attr-bar-fill c-github" style="width:55%"></div></div><span class="attr-score-tag">Medium</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">MS Copilot</span><div class="attr-bar-track"><div class="attr-bar-fill c-msft" style="width:90%"></div></div><span class="attr-score-tag">High</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Gemini</span><div class="attr-bar-track"><div class="attr-bar-fill c-gemini" style="width:85%"></div></div><span class="attr-score-tag">High (GCP)</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Amazon Q</span><div class="attr-bar-track"><div class="attr-bar-fill c-amazonq" style="width:95%"></div></div><span class="attr-score-tag">Very High</span></div>
+            <div class="attr-bar-row"><span class="attr-tool-tag">Codex</span><div class="attr-bar-track"><div class="attr-bar-fill c-openai" style="width:65%"></div></div><span class="attr-score-tag">Medium</span></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 07 — PROS / CONS ── -->
+<div class="proscons-section">
+  <div class="section-header">
+    <span class="section-num">— 07 —</span>
+    <h2 class="section-title">Strengths &amp; Limitations — Platform Assessment</h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="proscons-grid">
+
+    <div class="proscons-card is-hero">
+      <div class="card-tool-name">Claude Co-Work <span style="font-size:10px;color:var(--slate);font-weight:400;font-family:'DM Mono',monospace">Anthropic</span></div>
+      <div class="list-header pros">Strengths</div>
+      <ul class="pro-list">
+        <li>Highest SWE-bench score (80.8%) — #1 all tools 2026</li>
+        <li>Highest developer CSAT (91%) and NPS (54) of any tool</li>
+        <li>MCP-native — only tool natively compatible with AiForge stack</li>
+        <li>200K–1M token context: handles 30,000+ line codebases coherently</li>
+        <li>Multi-hour autonomous agentic sessions with minimal oversight</li>
+        <li>Full IP governance — zero code retention, no training on client code</li>
+        <li>Token transparency enables precise cost modelling per engagement</li>
+      </ul>
+      <div class="list-header cons">Limitations</div>
+      <ul class="con-list">
+        <li>Highest cost — $100/seat vs $19–50 for alternatives</li>
+        <li>Terminal-native CLI: steeper curve for junior engineers</li>
+        <li>API-based cost can spike on unpredictable long agentic sessions</li>
+        <li>ROI case collapses without measuring and evidencing velocity gains</li>
+      </ul>
+    </div>
+
+    <div class="proscons-card">
+      <div class="card-tool-name">GitHub Copilot <span style="font-size:10px;color:var(--slate);font-weight:400;font-family:'DM Mono',monospace">Microsoft</span></div>
+      <div class="list-header pros">Strengths</div>
+      <ul class="pro-list">
+        <li>Best onboarding: 96% of users accepting suggestions same day</li>
+        <li>Widest IDE support — every major editor including JetBrains, Xcode</li>
+        <li>Multi-model choice: GPT-5.4, Claude Sonnet 4.6, Gemini 2.5 Pro</li>
+        <li>55% faster task completion — most cited productivity study</li>
+        <li>Native GitHub PR review, issue assignment, Copilot Workspace</li>
+        <li>4.7M paid subscribers — deepest community and ecosystem</li>
+      </ul>
+      <div class="list-header cons">Limitations</div>
+      <ul class="con-list">
+        <li>27–30% code acceptance — large volume of output requires review</li>
+        <li>Premium request multiplier on advanced models creates cost spikes</li>
+        <li>Weaker on complex multi-file architectural reasoning vs Claude</li>
+        <li>48% of AI-generated code (research) contains security vulnerabilities</li>
+      </ul>
+    </div>
+
+    <div class="proscons-card">
+      <div class="card-tool-name">Microsoft Copilot <span style="font-size:10px;color:var(--slate);font-weight:400;font-family:'DM Mono',monospace">M365</span></div>
+      <div class="list-header pros">Strengths</div>
+      <ul class="pro-list">
+        <li>Deep M365 integration — Word, Excel, Teams, Outlook, SharePoint</li>
+        <li>Microsoft Graph grounding — org data context for responses</li>
+        <li>Best enterprise compliance posture for knowledge workers</li>
+        <li>~2.5 hrs/week saved per knowledge worker on office tasks</li>
+        <li>DOD cloud deployment available — highest government clearance</li>
+      </ul>
+      <div class="list-header cons">Limitations</div>
+      <ul class="con-list">
+        <li>Not a coding tool — no repo indexing, no inline completions</li>
+        <li>76% of users switch to ChatGPT when given a choice</li>
+        <li>11.5% paid AI market share — declining from 18.8% (6 months)</li>
+        <li>Only 8% of enterprise users prefer it over alternatives</li>
+        <li>Wrong tool for software engineering velocity gains</li>
+      </ul>
+    </div>
+
+    <div class="proscons-card">
+      <div class="card-tool-name">Gemini Code Assist <span style="font-size:10px;color:var(--slate);font-weight:400;font-family:'DM Mono',monospace">Google</span></div>
+      <div class="list-header pros">Strengths</div>
+      <ul class="pro-list">
+        <li>1M token context window — equal to Claude for whole-codebase reads</li>
+        <li>Best-in-class for Google Cloud / Firebase / BigQuery stacks</li>
+        <li>Free individual tier — lowest barrier to developer adoption</li>
+        <li>Enterprise Context: grounds AI in org's own API ecosystem</li>
+        <li>31% less context-switching; dependency resolution 40% faster</li>
+        <li>Next Edit Predictions and thinking insights (IntelliJ) differentiating</li>
+      </ul>
+      <div class="list-header cons">Limitations</div>
+      <ul class="con-list">
+        <li>63.8% SWE-bench — 17pt gap vs Claude on real-world coding</li>
+        <li>Requires GCP billing setup — 15 min friction vs 5 min for Q Dev</li>
+        <li>Weaker outside Google Cloud — limited value on Azure/AWS stacks</li>
+        <li>RCE security vulnerability patched Jul 2025 — trust impact</li>
+      </ul>
+    </div>
+
+    <div class="proscons-card">
+      <div class="card-tool-name">Amazon Q Dev <span style="font-size:10px;color:var(--slate);font-weight:400;font-family:'DM Mono',monospace">AWS</span></div>
+      <div class="list-header pros">Strengths</div>
+      <ul class="pro-list">
+        <li>Best compliance posture: SOC / HIPAA / PCI — regulated industries</li>
+        <li>Extraordinary ROI on AWS stacks — Lambda, CDK, IaC, Java transform</li>
+        <li>27% fewer deployment rollbacks on AWS-native configurations</li>
+        <li>5-minute onboarding (Builder ID) — fastest path to value</li>
+        <li>IP indemnity + built-in security scanning on Pro tier</li>
+      </ul>
+      <div class="list-header cons">Limitations</div>
+      <ul class="con-list">
+        <li>Strongly AWS-biased — poor ROI on Azure, GCP, or agnostic stacks</li>
+        <li>4% developer adoption — lowest market presence of all platforms</li>
+        <li>Performance degrades on codebases exceeding 15,000 lines</li>
+        <li>1,000 agentic request/mo cap — easily exhausted on complex projects</li>
+      </ul>
+    </div>
+
+      <div class="proscons-card">
+      <div class="card-tool-name">ChatGPT Codex <span style="font-size:10px;color:var(--slate);font-weight:400;font-family:'DM Mono',monospace">OpenAI</span></div>
+      <div class="list-header pros">Strengths</div>
+      <ul class="pro-list">
+        <li>~80% SWE-bench Verified — neck-and-neck with Claude, strong #2 contender</li>
+        <li>Asynchronous parallel task execution — assign many tasks, review later</li>
+        <li>Familiar ChatGPT interface — lowest conceptual learning curve</li>
+        <li>Cisco: 50% reduction in code review times; Duolingo: 67% faster PR turnaround</li>
+        <li>AGENTS.md governance: team-wide coding standards enforced at model level</li>
+        <li>4× more token-efficient than Claude Code per OpenAI internal claims</li>
+        <li>CI/CD Automations: issue triage, alert scanning without developer initiation</li>
+      </ul>
+      <div class="list-header cons">Limitations</div>
+      <ul class="con-list">
+        <li>Cloud-only sandboxed execution — no local/on-premise option</li>
+        <li>Credit-based pricing can be opaque — hard to predict monthly costs</li>
+        <li>Asynchronous model is a workflow change — not suited for inline completions</li>
+        <li>37% first-attempt accuracy — requires multi-retry cycles for complex tasks</li>
+        <li>Not MCP-native for AiForge stack — integration requires additional scaffolding</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── CH6: PULL QUOTE 1 ── -->
+<div class="pull-quote">
+  <div class="pull-quote-text">"The gap between the highest and lowest SWE-bench scores is now 17 percentage points. In production code, that gap is the difference between shipping and debugging."</div>
+  <div class="pull-quote-source">XTS AiForge Analysis · SWE-bench Verified Leaderboard · March 2026</div>
+</div>
+
+<!-- ── CH4: BEST FIT SECTION ── -->
+<div class="bestfit-section">
+  <div class="section-header">
+    <span class="section-num">— 08 —</span>
+    <h2 class="section-title">Best Fit — Find Your Platform</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <!-- Toggle -->
+  <div class="bestfit-toggle">
+    View by:
+    <button class="toggle-btn active" onclick="switchBestFit('problem')">Problem First</button>
+    <button class="toggle-btn" onclick="switchBestFit('platform')">Platform First</button>
+  </div>
+
+  <!-- PROBLEM-FIRST VIEW (default) -->
+  <div class="bestfit-view active" id="bf-problem">
+    <div class="bestfit-grid">
+
+      <div class="bestfit-card featured">
+        <div class="pain-headline">Your team loses days to cross-module debugging and architectural drift</div>
+        <div class="pain-desc">Complex refactoring across 10, 20, 30 files takes your senior engineers away from roadmap work. Context gets lost. Regressions appear in places nobody touched.</div>
+        <div class="pain-profile">Best for: Scale-ups 50–200 engineers · Complex product engineering · Stack-agnostic · Governance-critical client code</div>
+        <div class="pain-rec">Claude Co-Work — only tool with 1M token context + 80.8% SWE-bench</div>
+      </div>
+
+      <div class="bestfit-card">
+        <div class="pain-headline">Your developers waste hours on boilerplate, repetitive patterns, and documentation</div>
+        <div class="pain-desc">Junior and mid-level engineers spend the majority of their day on code that any capable developer could write. Velocity is lost to repetition, not complexity.</div>
+        <div class="pain-profile">Best for: Any team size · GitHub-native workflows · Polyglot environments · Cost-sensitive · Fast onboarding required</div>
+        <div class="pain-rec">GitHub Copilot — best onboarding, widest IDE support, lowest cost</div>
+      </div>
+
+      <div class="bestfit-card">
+        <div class="pain-headline">Your team has a backlog of parallel tasks — tests, bug fixes, migrations — that nobody has time to process</div>
+        <div class="pain-desc">The work is well-defined but time-consuming. It stacks up while engineers focus on higher-order problems. Sprint after sprint, the backlog doesn't move.</div>
+        <div class="pain-profile">Best for: Teams with high task volume · Async workflows · CI/CD-integrated environments · PR-based review processes</div>
+        <div class="pain-rec">ChatGPT Codex — async cloud sandbox, parallel task execution, PR automation</div>
+      </div>
+
+      <div class="bestfit-card">
+        <div class="pain-headline">Your AWS infrastructure is growing faster than your team can govern it</div>
+        <div class="pain-desc">Lambda functions, CDK stacks, IAM policies, Java modernisation — the AWS surface area is expanding and deployment rollbacks are costing you time and credibility.</div>
+        <div class="pain-profile">Best for: AWS-native teams · Regulated industries · Healthcare / Finance / Government · Java modernisation · IaC-heavy environments</div>
+        <div class="pain-rec">Amazon Q Developer — 20+ years of AWS best practice, built-in compliance</div>
+      </div>
+
+      <div class="bestfit-card">
+        <div class="pain-headline">Your Google Cloud codebase is growing faster than your team can navigate it</div>
+        <div class="pain-desc">Firebase, BigQuery, GCP APIs — the context-switching between documentation and IDE is slowing your engineers down. Cross-service dependencies are a constant source of friction.</div>
+        <div class="pain-profile">Best for: GCP-native teams · Large monorepos · Firebase / BigQuery / Android · Budget-conscious with free individual tier</div>
+        <div class="pain-rec">Gemini Code Assist — 1M context window, 31% less context-switching, GCP-native</div>
+      </div>
+
+      <div class="bestfit-card">
+        <div class="pain-headline">Your knowledge workers are drowning in meetings, emails, and documents — not code</div>
+        <div class="pain-desc">Your engineering productivity problem is actually an organisational productivity problem. The bottleneck is communication, coordination, and documentation — not the code itself.</div>
+        <div class="pain-profile">Best for: Microsoft 365 standardised enterprises · Knowledge-worker heavy orgs · Non-developer productivity · Office automation</div>
+        <div class="pain-rec">Microsoft Copilot M365 — Word, Excel, Teams, Outlook integration</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PLATFORM-FIRST VIEW -->
+  <div class="bestfit-view" id="bf-platform">
+    <div class="bestfit-grid">
+
+      <div class="bestfit-card featured">
+        <div class="platform-name">Claude Co-Work</div>
+        <div class="platform-maker">Anthropic · $100/seat</div>
+        <div class="platform-if">This is your tool if...</div>
+        <ul class="platform-conditions">
+          <li>Your work involves complex, multi-file architecture and refactoring</li>
+          <li>You need MCP-native integration with custom AI frameworks</li>
+          <li>Governance and IP protection are non-negotiable for client code</li>
+          <li>You have senior engineers who will invest in prompt quality</li>
+          <li>You need to evidence ROI per engagement to clients</li>
+        </ul>
+        <div class="platform-why">→ Highest benchmark score · MCP-native · AiForge compatible · Token-transparent</div>
+      </div>
+
+      <div class="bestfit-card">
+        <div class="platform-name">GitHub Copilot</div>
+        <div class="platform-maker">Microsoft · $10–39/seat</div>
+        <div class="platform-if">This is your tool if...</div>
+        <ul class="platform-conditions">
+          <li>Your primary need is daily inline completions and boilerplate reduction</li>
+          <li>You have diverse IDE preferences across your team</li>
+          <li>You want maximum onboarding speed with minimal friction</li>
+          <li>You're already standardised on GitHub for repos and PRs</li>
+          <li>Cost per seat is a meaningful constraint</li>
+        </ul>
+        <div class="platform-why">→ Widest IDE support · Lowest barrier · 4.7M paid subscribers · GitHub-native</div>
+      </div>
+
+      <div class="bestfit-card">
+        <div class="platform-name">ChatGPT Codex</div>
+        <div class="platform-maker">OpenAI · $20–30/seat</div>
+        <div class="platform-if">This is your tool if...</div>
+        <ul class="platform-conditions">
+          <li>You have high volumes of parallelisable, well-defined tasks</li>
+          <li>Your team works in async, delegation-based workflows</li>
+          <li>You want CI/CD-native automation without constant supervision</li>
+          <li>Your developers are already comfortable with the ChatGPT interface</li>
+          <li>Test generation and code review automation are priorities</li>
+        </ul>
+        <div class="platform-why">→ ~80% SWE-bench · Parallel cloud sandbox · AGENTS.md governance</div>
+      </div>
+
+      <div class="bestfit-card">
+        <div class="platform-name">Amazon Q Developer</div>
+        <div class="platform-maker">AWS · Free–$19/seat</div>
+        <div class="platform-if">This is your tool if...</div>
+        <ul class="platform-conditions">
+          <li>Your stack is predominantly AWS — Lambda, CDK, S3, IaC</li>
+          <li>You operate in a regulated industry requiring SOC/HIPAA/PCI</li>
+          <li>Java modernisation is on your roadmap</li>
+          <li>Lowest total cost for AWS-native teams is the priority</li>
+          <li>IP indemnity and built-in security scanning are required</li>
+        </ul>
+        <div class="platform-why">→ 27% fewer rollbacks · Strongest compliance posture · AWS-native depth</div>
+      </div>
+
+      <div class="bestfit-card">
+        <div class="platform-name">Gemini Code Assist</div>
+        <div class="platform-maker">Google · Free–$50/seat</div>
+        <div class="platform-if">This is your tool if...</div>
+        <ul class="platform-conditions">
+          <li>Your primary infrastructure is Google Cloud, Firebase, or BigQuery</li>
+          <li>You manage large monorepos requiring whole-codebase context</li>
+          <li>Free individual tier matters for developer grassroots adoption</li>
+          <li>API design and Apigee integration are core to your work</li>
+          <li>Budget constraints make the $22/seat Standard tier compelling</li>
+        </ul>
+        <div class="platform-why">→ 1M token context · GCP-native · 31% less context-switching · Free tier</div>
+      </div>
+
+      <div class="bestfit-card">
+        <div class="platform-name">Microsoft Copilot</div>
+        <div class="platform-maker">Microsoft M365 · $30/seat</div>
+        <div class="platform-if">This is your tool if...</div>
+        <ul class="platform-conditions">
+          <li>Your primary use case is Office productivity, not code generation</li>
+          <li>You need AI-assisted meeting notes, email drafts, and document generation</li>
+          <li>Your organisation is standardised on Microsoft 365 and Teams</li>
+          <li>Knowledge worker productivity is the bottleneck, not engineering velocity</li>
+          <li>Government or defence deployment with DOD cloud clearance is required</li>
+        </ul>
+        <div class="platform-why">→ Deep M365 integration · Microsoft Graph grounding · Not a coding tool</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── CH6: PULL QUOTE 2 ── -->
+<div class="pull-quote">
+  <div class="pull-quote-text">"Only 20% of engineering teams currently measure AI productivity gains. The other 80% are flying blind on their largest new cost line."</div>
+  <div class="pull-quote-source">Jellyfish State of Engineering Management Report 2025 · n=645</div>
+</div>
+
+
+<!-- ── SECTION 08 — OVERALL RANKING ── -->
+<div class="ranking-strip">
+  <div class="rank-cell r1">
+    <div class="rank-pos">01</div>
+    <div class="rank-cell-name">Claude Co-Work</div>
+    <div class="rank-category">Complex enterprise<br>engineering · Governed · MCP</div>
+  </div>
+  <div class="rank-cell r2">
+    <div class="rank-pos">02</div>
+    <div class="rank-cell-name">GitHub Copilot</div>
+    <div class="rank-category">Broadest adoption<br>daily dev velocity</div>
+  </div>
+  <div class="rank-cell">
+    <div class="rank-pos">03</div>
+    <div class="rank-cell-name">Gemini Code Assist</div>
+    <div class="rank-category">GCP-native teams<br>large codebase context</div>
+  </div>
+  <div class="rank-cell">
+    <div class="rank-pos">04</div>
+    <div class="rank-cell-name">Amazon Q Dev</div>
+    <div class="rank-category">AWS-native only<br>highest compliance</div>
+  </div>
+  <div class="rank-cell">
+    <div class="rank-pos">05</div>
+    <div class="rank-cell-name">Microsoft Copilot</div>
+    <div class="rank-category">Office productivity<br>not a coding tool</div>
+  </div>
+  <div class="rank-cell" style="border-top:2px solid #1A4A8A">
+    <div class="rank-pos" style="color:#1A4A8A;font-size:24px">NEW</div>
+    <div class="rank-cell-name">ChatGPT Codex</div>
+    <div class="rank-category">Async task delegation<br>parallel workloads</div>
+  </div>
+</div>
+
+
+<!-- ── CH6: PULL QUOTE 3 ── -->
+<div class="pull-quote">
+  <div class="pull-quote-text">"Partnering with XTS gave us the engineering depth we needed to evolve faster. Their team became an extension of ours — bringing speed, precision, and a clear focus on value creation while delivering measurable cost advantages across every product release."</div>
+  <div class="pull-quote-source">VP Product Engineering · Leading AI Learning Platform Provider · EdTech / Canada · XTS AiForge Engagement</div>
+</div>
+
+<!-- ── SECTION 09 — VERDICT ── -->
+<div class="verdict-section">
+  <div class="section-header">
+    <span class="section-num">— 09 —</span>
+    <h2 class="section-title">The Verdict — XTS AiForge Context</h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="verdict-grid">
+    <div class="verdict-main">
+      <div class="verdict-label">Strategic Conclusion</div>
+      <div class="verdict-headline">Claude Co-Work is the highest-benchmark and highest-cost tool. The <em>ROI case</em> is the only thing that makes the premium defensible.</div>
+      <div class="verdict-body">
+        At $100/seat versus $19–22 for GitHub Copilot or Gemini Code Assist, the cost premium is 4–5× and must be justified by three conditions holding simultaneously: (1) the 30–50% velocity gain is <em>measured and evidenced</em> per engagement via the Lumen framework; (2) the work is sufficiently complex that the 80.8% SWE-bench score and 1M token context create materially better output; and (3) MCP-native integration with AiForge, Meridian, and Lumen delivers capabilities no other platform can replicate.
+        <br><br>
+        Microsoft Copilot (M365) is explicitly excluded from the coding assistant comparison — it is a knowledge worker productivity tool, not an engineering velocity tool. Do not conflate the two. GitHub Copilot remains the market default for teams prioritising onboarding speed and IDE breadth. Amazon Q Developer is the correct choice for AWS-regulated workloads only. Gemini Code Assist is the value leader for GCP-centric teams with large codebases and budget constraints.
+        <br><br>
+        The condition that must hold for XTS: the Dashboard POC and monthly Lumen velocity reporting are not optional features. They are the commercial argument that transforms a tool cost into a client-facing value proposition.
+        <br><br>
+        ChatGPT Codex occupies a distinct position in this landscape: its asynchronous, sandboxed task model is architecturally different from all other tools — it is best understood as a <em>work delegation</em> platform rather than a coding assistant. For teams with high-volume, parallelisable tasks (test generation, bug fixes, code migrations), it delivers compelling ROI. For the complex, reasoning-heavy multi-file engineering that XTS performs for clients, it is a complement to Claude Co-Work rather than a substitute.
+      </div>
+    </div>
+    <div class="verdict-side gold-bg">
+      <div>
+        <div class="vs-label">Claude Co-Work CSAT vs Next Best</div>
+        <div class="vs-value highlight">91% vs 78%</div>
+        <div class="vs-sub">JetBrains AI Pulse 2026<br>13pt satisfaction premium</div>
+      </div>
+      <div class="vs-divider"></div>
+      <div>
+        <div class="vs-label">SWE-bench Lead vs Gemini</div>
+        <div class="vs-value highlight">+17pts</div>
+        <div class="vs-sub">80.8% vs 63.8%<br>Largest gap between top tools</div>
+      </div>
+      <div class="vs-divider"></div>
+      <div>
+        <div class="vs-label">Claude Code work adoption rate</div>
+        <div class="vs-value">18% → 24%</div>
+        <div class="vs-sub">Jan 2026 · 6× increase in 9 months<br>US/Canada 24% professional adoption</div>
+      </div>
+    </div>
+    <div class="verdict-side">
+      <div>
+        <div class="vs-label">Microsoft Copilot Market Position</div>
+        <div class="vs-value" style="font-size:18px;color:var(--amber)">Declining</div>
+        <div class="vs-sub">11.5% paid share, down from 18.8%<br>Wrong tool for dev velocity goals</div>
+      </div>
+      <div class="vs-divider"></div>
+      <div>
+        <div class="vs-label">Amazon Q scope constraint</div>
+        <div class="vs-value" style="font-size:16px;color:var(--teal)">AWS-only</div>
+        <div class="vs-sub">ROI collapses outside AWS stacks<br>Compliance leader for regulated infra</div>
+      </div>
+      <div class="vs-divider"></div>
+      <div>
+        <div class="vs-label">Codex positioning</div>
+        <div class="vs-value" style="font-size:16px;color:var(--blue)">Complement</div>
+        <div class="vs-sub">Async task delegation, not inline coding<br>Best: parallel workloads + PR automation</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     CH5: SELF-ASSESSMENT + LEAD CAPTURE
+═══════════════════════════════════════════════════════ -->
+<div class="assessment-section">
+  <div class="assessment-eyebrow">Interactive Tool</div>
+  <h2 class="assessment-title">Find Your <em>Perfect Fit</em></h2>
+  <p class="assessment-subtitle">Seven questions. Your personalised platform recommendation — based on your stack, team, and strategic priorities. No sign-up required to see your result.</p>
+
+  <!-- Progress -->
+  <div class="q-progress-wrap">
+    <div class="q-progress-label" id="q-progress-label">Question 1 of 7</div>
+    <div class="q-progress-track"><div class="q-progress-fill" id="q-progress-fill"></div></div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card active" id="q1">
+    <div class="q-number">— Question 01 of 07 —</div>
+    <div class="q-text">What best describes your primary cloud environment?</div>
+    <div class="q-options">
+      <button class="q-option" data-q="1" data-val="aws">AWS-native — Lambda, CDK, IaC, S3 are our primary stack</button>
+      <button class="q-option" data-q="1" data-val="gcp">Google Cloud — GCP, Firebase, BigQuery, Android</button>
+      <button class="q-option" data-q="1" data-val="azure">Microsoft Azure / M365 standardised</button>
+      <button class="q-option" data-q="1" data-val="agnostic">Multi-cloud or cloud-agnostic</button>
+      <button class="q-option" data-q="1" data-val="onprem">On-premise or hybrid deployment</button>
+    </div>
+    <div class="q-nav">
+      <span></span>
+      <button class="q-btn q-btn-next" id="next1" disabled onclick="nextQ(1)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="q2">
+    <div class="q-number">— Question 02 of 07 —</div>
+    <div class="q-text">How many software engineers are in your organisation?</div>
+    <div class="q-options">
+      <button class="q-option" data-q="2" data-val="startup">1–10 · Startup / early stage</button>
+      <button class="q-option" data-q="2" data-val="scaleup">11–50 · Scale-up</button>
+      <button class="q-option" data-q="2" data-val="growth">51–200 · Growth stage</button>
+      <button class="q-option" data-q="2" data-val="enterprise">200+ · Enterprise</button>
+    </div>
+    <div class="q-nav">
+      <button class="q-btn q-btn-back" onclick="prevQ(2)">← Back</button>
+      <button class="q-btn q-btn-next" id="next2" disabled onclick="nextQ(2)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="q3">
+    <div class="q-number">— Question 03 of 07 —</div>
+    <div class="q-text">What dominates your team's coding work day-to-day?</div>
+    <div class="q-options">
+      <button class="q-option" data-q="3" data-val="inline">Inline completions, boilerplate, quick feature work</button>
+      <button class="q-option" data-q="3" data-val="complex">Complex multi-file architecture and refactoring</button>
+      <button class="q-option" data-q="3" data-val="infra">Infrastructure, IaC, cloud configuration</button>
+      <button class="q-option" data-q="3" data-val="async">Parallel tasks — test generation, bug fixes, migrations</button>
+      <button class="q-option" data-q="3" data-val="office">Office productivity — docs, meetings, reporting</button>
+    </div>
+    <div class="q-nav">
+      <button class="q-btn q-btn-back" onclick="prevQ(3)">← Back</button>
+      <button class="q-btn q-btn-next" id="next3" disabled onclick="nextQ(3)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="q4">
+    <div class="q-number">— Question 04 of 07 —</div>
+    <div class="q-text">How critical is data governance and IP protection?</div>
+    <div class="q-options">
+      <button class="q-option" data-q="4" data-val="critical">Critical — regulated industry, client code, enterprise-grade required</button>
+      <button class="q-option" data-q="4" data-val="important">Important — we need controls but aren't heavily regulated</button>
+      <button class="q-option" data-q="4" data-val="moderate">Moderate — standard SaaS data policies are sufficient</button>
+      <button class="q-option" data-q="4" data-val="low">Low — early stage, moving fast, governance comes later</button>
+    </div>
+    <div class="q-nav">
+      <button class="q-btn q-btn-back" onclick="prevQ(4)">← Back</button>
+      <button class="q-btn q-btn-next" id="next4" disabled onclick="nextQ(4)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="q5">
+    <div class="q-number">— Question 05 of 07 —</div>
+    <div class="q-text">How would your team prefer to interact with an AI coding tool?</div>
+    <div class="q-options">
+      <button class="q-option" data-q="5" data-val="minimal">Minimal instruction — just works out of the box as I type</button>
+      <button class="q-option" data-q="5" data-val="structured">Structured prompts — we'll invest time for better output</button>
+      <button class="q-option" data-q="5" data-val="delegate">Task delegation — assign and come back to reviewed results</button>
+      <button class="q-option" data-q="5" data-val="chat">Conversational — familiar chat interface, low learning curve</button>
+    </div>
+    <div class="q-nav">
+      <button class="q-btn q-btn-back" onclick="prevQ(5)">← Back</button>
+      <button class="q-btn q-btn-next" id="next5" disabled onclick="nextQ(5)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card" id="q6">
+    <div class="q-number">— Question 06 of 07 —</div>
+    <div class="q-text">What best describes your AI tooling budget per seat per month?</div>
+    <div class="q-options">
+      <button class="q-option" data-q="6" data-val="free">Free or minimal cost — bootstrapped or very cost-sensitive</button>
+      <button class="q-option" data-q="6" data-val="low">$10–20 per seat — standard tooling budget</button>
+      <button class="q-option" data-q="6" data-val="mid">$20–50 per seat — investing meaningfully for productivity gains</button>
+      <button class="q-option" data-q="6" data-val="premium">$100+ per seat — premium, ROI must be evidenced</button>
+    </div>
+    <div class="q-nav">
+      <button class="q-btn q-btn-back" onclick="prevQ(6)">← Back</button>
+      <button class="q-btn q-btn-next" id="next6" disabled onclick="nextQ(6)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card" id="q7">
+    <div class="q-number">— Question 07 of 07 —</div>
+    <div class="q-text">What is the single most important outcome from AI coding adoption?</div>
+    <div class="q-options">
+      <button class="q-option" data-q="7" data-val="speed">Raw speed — ship more features faster</button>
+      <button class="q-option" data-q="7" data-val="quality">Code quality — fewer bugs, better architecture, less rework</button>
+      <button class="q-option" data-q="7" data-val="compliance">Compliance — governance, IP protection, auditability</button>
+      <button class="q-option" data-q="7" data-val="cost">Cost efficiency — maximum output per dollar spent</button>
+      <button class="q-option" data-q="7" data-val="enablement">Team enablement — upskill engineers, reduce bottlenecks</button>
+    </div>
+    <div class="q-nav">
+      <button class="q-btn q-btn-back" onclick="prevQ(7)">← Back</button>
+      <button class="q-btn q-btn-next" id="next7" disabled onclick="showResult()">See My Recommendation →</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="q-result" id="q-result">
+    <div class="result-header">
+      <div class="result-eyebrow">Your Personalised Recommendation</div>
+      <div class="result-primary" id="result-primary">—</div>
+      <div class="result-rationale" id="result-rationale">—</div>
+    </div>
+    <div class="result-grid">
+      <div class="result-cell">
+        <div class="result-cell-label">Secondary Option</div>
+        <div class="result-cell-value good" id="result-secondary">—</div>
+        <div class="result-cell-desc" id="result-secondary-desc">—</div>
+      </div>
+      <div class="result-cell">
+        <div class="result-cell-label">Avoid For Your Profile</div>
+        <div class="result-cell-value warn" id="result-avoid">—</div>
+        <div class="result-cell-desc" id="result-avoid-desc">—</div>
+      </div>
+      <div class="result-cell xts-cell">
+        <div class="result-cell-label">XTS AiForge Insight</div>
+        <div class="result-cell-value xts-col">AiForge Compatible</div>
+        <div class="result-cell-desc" id="result-xts">—</div>
+      </div>
+    </div>
+
+    <!-- CH6: Re-engagement for Tier 1/2 -->
+    <div class="reengagement-bar">
+      <div class="reengagement-text"><strong>Found this useful?</strong> Share this report with your team or follow XTS for quarterly AI intelligence updates.</div>
+      <div class="reengagement-actions">
+        <a class="reeng-btn" href="https://www.linkedin.com/company/xponential-technology-services" target="_blank">↗ Follow XTS on LinkedIn</a>
+        <button class="reeng-btn primary" onclick="document.getElementById('lead-capture-form').scrollIntoView({behavior:'smooth'})">Go Deeper with XTS →</button>
+      </div>
+    </div>
+
+    <!-- LEAD CAPTURE -->
+    <div class="lead-capture" id="lead-capture-form">
+      <div class="lead-capture-title">Want XTS to pressure-test this recommendation against your actual environment?</div>
+      <div class="lead-capture-sub">We'll review your profile before we reach out — expect a conversation that already knows your stack, not one that starts from scratch.</div>
+
+      <form onsubmit="submitLead(event)">
+        <div class="lead-form-grid">
+          <div class="lead-field">
+            <label>First Name</label>
+            <input type="text" id="lead-name" placeholder="Your first name" required>
+          </div>
+          <div class="lead-field">
+            <label>Email Address</label>
+            <input type="email" id="lead-email" placeholder="you@company.com" required>
+          </div>
+          <div class="lead-field">
+            <label>Organisation</label>
+            <input type="text" id="lead-org" placeholder="Company name">
+          </div>
+          <div class="lead-field">
+            <label>Your Role</label>
+            <select id="lead-role">
+              <option value="">Select your role</option>
+              <option>CTO / CIO</option>
+              <option>VP Engineering</option>
+              <option>Founder / CEO</option>
+              <option>Engineering Manager</option>
+              <option>Principal / Staff Engineer</option>
+              <option>Product Leader</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="lead-checkboxes">
+          <div class="lead-checkbox-row">
+            <input type="checkbox" id="cb-conversation">
+            <label class="lead-checkbox-label" for="cb-conversation"><strong>I'm open to a conversation with XTS</strong> about how this recommendation applies to my organisation and environment.</label>
+          </div>
+          <div class="lead-checkbox-row">
+            <input type="checkbox" id="cb-updates">
+            <label class="lead-checkbox-label" for="cb-updates"><strong>Send me the XTS AiForge Quarterly Intelligence Update</strong> — we track how these platforms evolve so you don't have to.</label>
+          </div>
+        </div>
+
+        <div class="lead-privacy">Your information is shared only with XTS AiForge and is never sold or shared with third parties. · <a href="https://www.xtsworld.com" target="_blank" style="color:var(--slate)">xtsworld.com</a></div>
+
+        <button type="submit" class="lead-submit">Submit →</button>
+      </form>
+
+      <div class="lead-confirm" id="lead-confirm">
+        <div class="lead-confirm-title">Thank you.</div>
+        <div class="lead-confirm-text" id="lead-confirm-text">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── CH3: RESEARCH SOURCES (bottom) ── -->
+<div class="sources-bar">
+  <div class="sources-label">Research Sources</div>
+  <div class="sources-pills">
+    <a class="source-pill-link" href="https://blog.jetbrains.com/research/2026/04/which-ai-coding-tools-do-developers-actually-use-at-work/" target="_blank">JetBrains AI Pulse Survey 2026 · n=10,000+</a>
+    <a class="source-pill-link" href="https://www.microsoft.com/en-us/research/publication/the-impact-of-ai-on-developer-productivity-evidence-from-github-copilot/" target="_blank">GitHub/Microsoft Research · 4,800 dev study</a>
+    <a class="source-pill-link" href="https://survey.stackoverflow.co/2025/" target="_blank">Stack Overflow Dev Survey 2025 · n=49,000+</a>
+    <a class="source-pill-link" href="https://www.swebench.com" target="_blank">SWE-bench Verified Leaderboard · Mar 2026</a>
+    <a class="source-pill-link" href="https://jellyfish.co/resources/state-of-engineering-management/" target="_blank">Jellyfish State of Eng. Management 2025 · n=645</a>
+    <a class="source-pill-link" href="https://dora.dev/research/" target="_blank">Google DORA Report 2025 · n=5,000</a>
+    <a class="source-pill-link" href="https://www.gartner.com/en/documents/5227983" target="_blank">Gartner Magic Quadrant: AI Code Assistants · Sep 2025</a>
+    <a class="source-pill-link" href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/" target="_blank">METR Randomised Controlled Trial 2025</a>
+    <a class="source-pill-link" href="https://www.g2.com/categories/ai-coding-assistants" target="_blank">G2 Enterprise Reviews 2026</a>
+    <a class="source-pill-link" href="https://www.anthropic.com/news/claude-4" target="_blank">Anthropic Claude 4 Official Benchmarks</a>
+    <a class="source-pill-link" href="https://uvik.net/blog/ai-coding-assistant-statistics/" target="_blank">Uvik AI Coding Statistics 2026</a>
+    <a class="source-pill-link" href="https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/the-economic-potential-of-generative-ai" target="_blank">McKinsey Technology Report 2025</a>
+  </div>
+</div>
+
+<footer class="footnote">
+  <div class="footnote-text">
+    <strong>Methodology:</strong> Pricing sourced from official vendor documentation as of April 2026. SWE-bench scores from independent leaderboard (swebench.com) and vendor disclosures verified March–April 2026. Velocity statistics from: GitHub/Microsoft Research (n=4,800), Google DORA (n≈5,000), Jellyfish State of Engineering Management (n=645), JetBrains AI Pulse (n=10,000+), METR RCT 2025, Uvik AI Coding Statistics 2026. Developer satisfaction from JetBrains AI Pulse January 2026. Market share data from Stack Overflow Developer Survey 2025, Jellyfish, and Recon Analytics. Microsoft Copilot is compared as a distinct product from GitHub Copilot per Microsoft's own classification; it is not a coding assistant and is assessed separately on that basis.
+    <br><br>
+    <strong>Note:</strong> Microsoft Copilot (M365) is included in this analysis to clarify the product distinction from GitHub Copilot. ChatGPT Codex (OpenAI) is assessed as of April 2026 using GPT-5.3-Codex and GPT-5.4 model data. Codex's asynchronous cloud-sandbox model is architecturally distinct from IDE-integrated tools; comparisons on "ease of use" reflect its task-delegation workflow rather than inline completion paradigm. For software engineering velocity comparisons, it should not be considered a like-for-like alternative to the other four platforms. All benchmark data and productivity statistics are subject to vendor pricing changes and continued model iteration. Security vulnerability statistics cited represent industry-wide research findings, not single-vendor assessments.
+  </div>
+  <div class="footnote-brand">
+    <div class="brand-name">XTS AiForge</div>
+    <div class="brand-sub">Intelligence Brief · April 2026</div>
+  </div>
+</footer>
+
+<script>
+// ── CH2: EXPANDABLE DETAIL PANELS ──
+document.querySelectorAll('.expandable').forEach(el => {
+  el.addEventListener('click', function(e) {
+    if (e.target.classList.contains('q-option') || e.target.classList.contains('q-btn')) return;
+    const panelId = this.dataset.panel;
+    if (!panelId) return;
+    const panel = document.getElementById(panelId);
+    if (!panel) return;
+    const isOpen = this.classList.contains('open');
+    // Close all panels
+    document.querySelectorAll('.expandable').forEach(x => x.classList.remove('open'));
+    document.querySelectorAll('.detail-panel').forEach(x => x.classList.remove('visible'));
+    if (!isOpen) {
+      this.classList.add('open');
+      panel.classList.add('visible');
+    }
+  });
+});
+
+// ── PDF DOWNLOAD + OVERLAY ──
+function triggerPdfDownload() {
+  // Show overlay (download starts simultaneously)
+  document.getElementById('pdf-overlay').classList.add('visible');
+  // Trigger browser print dialog after brief delay
+  setTimeout(() => { window.print(); }, 400);
+}
+
+function closePdfOverlay() {
+  document.getElementById('pdf-overlay').classList.remove('visible');
+}
+
+function submitPdfLead() {
+  const name = document.getElementById('pdf-name').value.trim();
+  const email = document.getElementById('pdf-email').value.trim();
+  const wantsConvo = document.getElementById('pdf-cb-convo').checked;
+
+  if (!email) {
+    document.getElementById('pdf-email').focus();
+    document.getElementById('pdf-email').style.borderColor = 'var(--amber)';
+    return;
+  }
+
+  const subject = encodeURIComponent(`XTS Intelligence Brief — PDF Download${name ? ' — ' + name : ''}`);
+  const body = encodeURIComponent(
+    `PDF Download Lead\n\nName: ${name || 'Not provided'}\nEmail: ${email}\nConversation interest: ${wantsConvo ? 'Yes' : 'No'}\nSource: AI Coding Intelligence Brief 2026`
+  );
+
+  window.location.href = `mailto:business@xtsworld.com?subject=${subject}&body=${body}`;
+
+  // Update overlay to confirmation state
+  const card = document.querySelector('.pdf-overlay-card');
+  card.innerHTML = `
+    <div style="padding:8px 0">
+      <div class="pdf-overlay-eyebrow">Thank you${name ? ', ' + name : ''}</div>
+      <div class="pdf-overlay-title" style="font-size:18px">You\'re on the list.</div>
+      <div class="pdf-overlay-sub" style="margin-bottom:24px">We\'ll send the next edition of the XTS AiForge Intelligence Brief directly to ${email} — only when there\'s something worth your attention.${wantsConvo ? '<br><br>We\'ll also be in touch about your environment specifically. Expect a conversation that already knows your context.' : ''}</div>
+      <button class="pdf-overlay-skip" style="width:100%" onclick="closePdfOverlay()">Close</button>
+    </div>`;
+}
+
+// Close overlay on backdrop click
+document.getElementById('pdf-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closePdfOverlay();
+});
+
+// Close overlay on Escape (extend existing handler)
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closePdfOverlay();
+  }
+});
+
+
+// ── CH4: BEST FIT TOGGLE ──
+function switchBestFit(view) {
+  document.querySelectorAll('.bestfit-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('bf-' + view).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── CH5: ASSESSMENT LOGIC ──
+const answers = {};
+
+document.querySelectorAll('.q-option').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const q = this.dataset.q;
+    const val = this.dataset.val;
+    // Deselect siblings
+    document.querySelectorAll(`.q-option[data-q="${q}"]`).forEach(b => b.classList.remove('selected'));
+    this.classList.add('selected');
+    answers[q] = val;
+    const nextBtn = document.getElementById('next' + q);
+    if (nextBtn) nextBtn.disabled = false;
+  });
+});
+
+function nextQ(current) {
+  if (!answers[current]) return;
+  document.getElementById('q' + current).classList.remove('active');
+  const next = current + 1;
+  if (next <= 7) {
+    document.getElementById('q' + next).classList.add('active');
+    updateProgress(next);
+  }
+}
+
+function prevQ(current) {
+  document.getElementById('q' + current).classList.remove('active');
+  document.getElementById('q' + (current - 1)).classList.add('active');
+  updateProgress(current - 1);
+}
+
+function updateProgress(q) {
+  const pct = ((q - 1) / 7) * 100;
+  document.getElementById('q-progress-fill').style.width = pct + '%';
+  document.getElementById('q-progress-label').textContent = 'Question ' + q + ' of 7';
+}
+
+function getRecommendation() {
+  const scores = {
+    'Claude Co-Work': 0,
+    'GitHub Copilot': 0,
+    'ChatGPT Codex': 0,
+    'Amazon Q Developer': 0,
+    'Gemini Code Assist': 0,
+    'Microsoft Copilot': 0
+  };
+
+  // Q1: Cloud
+  const cloudMap = { aws: {'Amazon Q Developer': 4}, gcp: {'Gemini Code Assist': 4}, azure: {'Microsoft Copilot': 3, 'GitHub Copilot': 2}, agnostic: {'Claude Co-Work': 3, 'GitHub Copilot': 2, 'ChatGPT Codex': 2}, onprem: {'Claude Co-Work': 2} };
+  if (cloudMap[answers[1]]) Object.entries(cloudMap[answers[1]]).forEach(([k,v]) => scores[k] += v);
+
+  // Q2: Team size
+  const sizeMap = { startup: {'GitHub Copilot': 3, 'ChatGPT Codex': 2}, scaleup: {'GitHub Copilot': 2, 'Claude Co-Work': 2, 'ChatGPT Codex': 2}, growth: {'Claude Co-Work': 3, 'GitHub Copilot': 2}, enterprise: {'Claude Co-Work': 4, 'Amazon Q Developer': 2, 'Microsoft Copilot': 2} };
+  if (sizeMap[answers[2]]) Object.entries(sizeMap[answers[2]]).forEach(([k,v]) => scores[k] += v);
+
+  // Q3: Work type
+  const workMap = { inline: {'GitHub Copilot': 5}, complex: {'Claude Co-Work': 5}, infra: {'Amazon Q Developer': 4, 'Gemini Code Assist': 2}, async: {'ChatGPT Codex': 5}, office: {'Microsoft Copilot': 6} };
+  if (workMap[answers[3]]) Object.entries(workMap[answers[3]]).forEach(([k,v]) => scores[k] += v);
+
+  // Q4: Governance
+  const govMap = { critical: {'Claude Co-Work': 4, 'Amazon Q Developer': 4}, important: {'Claude Co-Work': 3, 'GitHub Copilot': 2}, moderate: {'GitHub Copilot': 2, 'Gemini Code Assist': 2}, low: {'ChatGPT Codex': 2, 'GitHub Copilot': 2} };
+  if (govMap[answers[4]]) Object.entries(govMap[answers[4]]).forEach(([k,v]) => scores[k] += v);
+
+  // Q5: Interaction
+  const intMap = { minimal: {'GitHub Copilot': 4}, structured: {'Claude Co-Work': 4}, delegate: {'ChatGPT Codex': 4}, chat: {'ChatGPT Codex': 3, 'Microsoft Copilot': 2} };
+  if (intMap[answers[5]]) Object.entries(intMap[answers[5]]).forEach(([k,v]) => scores[k] += v);
+
+  // Q6: Budget
+  const budgetMap = { free: {'Gemini Code Assist': 3, 'Amazon Q Developer': 3}, low: {'GitHub Copilot': 4}, mid: {'GitHub Copilot': 2, 'ChatGPT Codex': 2, 'Gemini Code Assist': 2, 'Amazon Q Developer': 2}, premium: {'Claude Co-Work': 4} };
+  if (budgetMap[answers[6]]) Object.entries(budgetMap[answers[6]]).forEach(([k,v]) => scores[k] += v);
+
+  // Q7: Priority
+  const prioMap = { speed: {'GitHub Copilot': 3, 'ChatGPT Codex': 3}, quality: {'Claude Co-Work': 4}, compliance: {'Amazon Q Developer': 4, 'Claude Co-Work': 3}, cost: {'Gemini Code Assist': 3, 'Amazon Q Developer': 3, 'GitHub Copilot': 2}, enablement: {'GitHub Copilot': 3, 'Claude Co-Work': 2} };
+  if (prioMap[answers[7]]) Object.entries(prioMap[answers[7]]).forEach(([k,v]) => scores[k] += v);
+
+  const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
+  return { primary: sorted[0][0], secondary: sorted[1][0], avoid: sorted[sorted.length-1][0] };
+}
+
+const platformData = {
+  'Claude Co-Work': {
+    rationale: 'Your profile — complex work, governance requirements, and willingness to invest in quality — maps directly to what Claude Co-Work was built for. The 80.8% SWE-bench score and 1M token context window deliver measurably better output on the tasks that matter most to your team.',
+    secondaryDesc: 'For daily inline completions and boilerplate alongside Claude Co-Work for architectural work.',
+    avoidDesc: 'Not optimised for your use case — lower ROI on your stack and work type.',
+    xts: 'Claude Co-Work is natively compatible with XTS AiForge via MCP. Your recommendation aligns with XTS\'s delivery framework — and the Lumen velocity measurement system can evidence your ROI from day one.'
+  },
+  'GitHub Copilot': {
+    rationale: 'Your profile — broad IDE needs, daily completions, cost-sensitivity, and fast onboarding — makes GitHub Copilot the highest-ROI choice. 4.7 million paid developers agree. It delivers immediate, measurable value at the lowest cost of entry of any platform.',
+    secondaryDesc: 'For complex architectural tasks and multi-file refactoring that Copilot handles less well.',
+    avoidDesc: 'Significant overkill for your profile — cost premium not justified by your use case.',
+    xts: 'XTS recommends GitHub Copilot for teams prioritising daily velocity, and Claude Co-Work for client-facing complex engineering. A dual-tool approach is often optimal — XTS can structure this for your team.'
+  },
+  'ChatGPT Codex': {
+    rationale: 'Your profile — high-volume parallel tasks, async workflow preference, and familiar ChatGPT interface — makes Codex the strongest fit. Its sandboxed cloud agent executes test generation, bug fixes, and migrations while your team focuses on higher-order work.',
+    secondaryDesc: 'For complex reasoning-heavy architectural tasks that need deeper context.',
+    avoidDesc: 'Wrong architecture for your workflow — synchronous inline tools don\'t match your delegation model.',
+    xts: 'XTS positions Codex as a complement to Claude Co-Work for high-volume task processing. XTS can help you design an AGENTS.md governance file that aligns Codex\'s behaviour with your engineering standards.'
+  },
+  'Amazon Q Developer': {
+    rationale: 'Your AWS-native stack, compliance requirements, and infrastructure focus make Amazon Q Developer the clear choice. Fine-tuned on 20+ years of AWS best practices, it reduces deployment rollbacks and delivers the strongest compliance posture of any tool in this analysis.',
+    secondaryDesc: 'For complex cross-module reasoning outside your AWS environment.',
+    avoidDesc: 'Strongly AWS-biased — poor ROI on your actual stack profile.',
+    xts: 'XTS\'s AiForge framework integrates with AWS Bedrock and can layer narrative intelligence and MCP connectivity on top of Amazon Q\'s infrastructure-level capabilities.'
+  },
+  'Gemini Code Assist': {
+    rationale: 'Your GCP-native environment, large codebase, and budget sensitivity make Gemini Code Assist the highest-value choice. The 1M token context window handles your entire codebase in a single pass, and the free individual tier means zero barrier to grassroots adoption.',
+    secondaryDesc: 'For complex reasoning-heavy refactoring where Gemini\'s 63.8% SWE-bench score falls short.',
+    avoidDesc: 'Significant ecosystem mismatch — optimised for a different cloud environment than yours.',
+    xts: 'XTS\'s AiForge framework integrates with Google Cloud and can layer private LLM orchestration and MCP-compatible intelligence on top of Gemini Code Assist\'s GCP-native capabilities.'
+  },
+  'Microsoft Copilot': {
+    rationale: 'Your profile points to an organisational productivity challenge, not a code generation challenge. Microsoft Copilot\'s deep M365 integration — Word, Excel, Teams, Outlook — addresses the actual bottleneck your team faces. Pair it with GitHub Copilot for the engineers who need coding assistance.',
+    secondaryDesc: 'For the developers in your team who need actual code generation assistance.',
+    avoidDesc: 'Wrong category of tool — your profile does not indicate a code-generation bottleneck.',
+    xts: 'XTS recommends a two-tool approach for Microsoft-standardised organisations: M365 Copilot for knowledge workers, GitHub Copilot for engineers. XTS can help structure the governance framework for both.'
+  }
+};
+
+function showResult() {
+  document.getElementById('q7').classList.remove('active');
+  document.getElementById('q-progress-fill').style.width = '100%';
+  document.getElementById('q-progress-label').textContent = 'Complete';
+
+  const rec = getRecommendation();
+  const data = platformData[rec.primary];
+  const secondaryData = platformData[rec.secondary];
+
+  document.getElementById('result-primary').textContent = rec.primary;
+  document.getElementById('result-rationale').textContent = data.rationale;
+  document.getElementById('result-secondary').textContent = rec.secondary;
+  document.getElementById('result-secondary-desc').textContent = secondaryData ? rec.secondary + ' is your best alternative. ' + data.secondaryDesc : '';
+  document.getElementById('result-avoid').textContent = rec.avoid;
+  document.getElementById('result-avoid-desc').textContent = data.avoidDesc;
+  document.getElementById('result-xts').textContent = data.xts;
+
+  document.getElementById('q-result').classList.add('visible');
+  document.getElementById('q-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function submitLead(e) {
+  e.preventDefault();
+  const name = document.getElementById('lead-name').value;
+  const email = document.getElementById('lead-email').value;
+  const org = document.getElementById('lead-org').value;
+  const role = document.getElementById('lead-role').value;
+  const wantsConvo = document.getElementById('cb-conversation').checked;
+  const wantsUpdates = document.getElementById('cb-updates').checked;
+
+  const rec = getRecommendation();
+  const confirmEl = document.getElementById('lead-confirm');
+  const confirmText = document.getElementById('lead-confirm-text');
+
+  let msg = '';
+  if (wantsConvo) {
+    msg = `Thank you, ${name}. We'll review your profile — ${rec.primary} recommendation, ${org ? org + ', ' : ''}${role} — before we reach out. Expect a conversation that already knows your stack, not one that starts from scratch.`;
+  } else if (wantsUpdates) {
+    msg = `Thank you, ${name}. We'll send the XTS AiForge Quarterly Intelligence Update to ${email}. You'll hear from us when something meaningful changes in the AI coding landscape.`;
+  } else {
+    msg = `Thank you, ${name}. Your recommendation has been noted. Feel free to return to this report any time — and follow XTS on LinkedIn for quarterly intelligence updates.`;
+  }
+
+  // Build mailto as fallback (Formspree integration point)
+  const subject = encodeURIComponent(`XTS AI Coding Assessment — ${name} — ${rec.primary}`);
+  const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nOrg: ${org}\nRole: ${role}\nPrimary Rec: ${rec.primary}\nConversation Interest: ${wantsConvo}\nUpdates: ${wantsUpdates}\nAnswers: Q1=${answers[1]} Q2=${answers[2]} Q3=${answers[3]} Q4=${answers[4]} Q5=${answers[5]} Q6=${answers[6]} Q7=${answers[7]}`);
+  const mailtoLink = `mailto:business@xtsworld.com?subject=${subject}&body=${body}`;
+  window.location.href = mailtoLink;
+
+  confirmText.textContent = msg;
+  confirmEl.classList.add('visible');
+  document.querySelector('form').style.display = 'none';
+}
+</script>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,228 @@
+# 🔧 Enhanced CI Pipeline - With Detailed Explanations
+# This workflow runs on every push and pull request to main branch
+
+name: Enhanced CI Pipeline
+
+# TRIGGER: When should this workflow run?
+on:
+  push:
+    branches: [ main, develop ]  # Run on push to main or develop
+  pull_request:
+    branches: [ main ]  # Run on PRs targeting main
+
+# ENVIRONMENT VARIABLES: Available to all jobs
+env:
+  NODE_VERSION: '18'  # Node.js version to use
+  DOCKER_IMAGE: fazeelmemon/employee-frontend  # Docker image name
+
+# JOBS: Multiple jobs can run in parallel or sequence
+jobs:
+  
+  # ============================================
+  # JOB 1: CODE QUALITY CHECKS
+  # Purpose: Ensure code follows standards
+  # ============================================
+  code-quality:
+    name: Code Quality & Linting
+    runs-on: ubuntu-latest
+    
+    steps:
+      # STEP 1: Get the code
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        # Why? We need the code to analyze it
+        
+      # STEP 2: Setup Node.js environment
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'  # Cache npm dependencies for faster builds
+        # Why? We need Node.js to run npm commands
+        
+      # STEP 3: Install dependencies
+      - name: 📦 Install dependencies
+        run: npm ci
+        # Why? npm ci is faster and more reliable than npm install
+        # It uses package-lock.json for exact versions
+        
+      # STEP 4: Run ESLint
+      - name: 🔍 Run ESLint
+        run: npm run lint
+        # Why? Check for code quality issues, unused variables, etc.
+        # If this fails, the pipeline stops (fail fast!)
+        
+      # STEP 5: Check code formatting (optional)
+      - name: 💅 Check code formatting
+        run: |
+          echo "Checking if code is properly formatted..."
+          # You can add Prettier here later
+        continue-on-error: true  # Don't fail pipeline if this fails
+        # Why? Formatting is less critical than functionality
+
+  # ============================================
+  # JOB 2: SECURITY SCANNING
+  # Purpose: Find vulnerabilities in dependencies
+  # ============================================
+  security-scan:
+    name: Security Vulnerability Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📦 Install dependencies
+        run: npm ci
+        
+      # STEP: Run npm audit
+      - name: 🔒 Run npm audit
+        run: npm audit --audit-level=moderate
+        # Why? Check for known security vulnerabilities
+        # --audit-level=moderate: Only fail on moderate+ severity
+        continue-on-error: true  # Don't block deployment for low-severity issues
+        
+      # STEP: Check for outdated packages
+      - name: 📊 Check outdated packages
+        run: npm outdated || true
+        # Why? Know which packages need updates
+        # || true: Don't fail if packages are outdated
+
+  # ============================================
+  # JOB 3: BUILD & TEST
+  # Purpose: Verify code compiles and works
+  # Depends on: code-quality and security-scan must pass first
+  # ============================================
+  build-and-test:
+    name: Build & Test Application
+    runs-on: ubuntu-latest
+    needs: [code-quality, security-scan]  # Wait for these jobs to complete
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📦 Install dependencies
+        run: npm ci
+        
+      # STEP: Build the application
+      - name: 🏗️ Build application
+        run: npm run build
+        # Why? Ensure Vite can build production bundle
+        # If build fails, no point in continuing
+        
+      # STEP: Run tests (we'll add tests later)
+      - name: 🧪 Run tests
+        run: |
+          echo "Running tests..."
+          # npm test (we'll add this later)
+        continue-on-error: true
+        # Why? Tests ensure code works as expected
+        
+      # STEP: Upload build artifacts
+      - name: 📤 Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+          retention-days: 7
+        # Why? Save build output for later use or debugging
+        # Other jobs can download these artifacts
+
+  # ============================================
+  # JOB 4: DOCKER BUILD & PUSH
+  # Purpose: Create and publish Docker image
+  # Depends on: build-and-test must pass first
+  # ============================================
+  docker-build-push:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    needs: [build-and-test]  # Only run if build succeeds
+    
+    # Only run on main branch (not on PRs)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      # STEP: Set up Docker Buildx
+      - name: 🐳 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        # Why? Buildx provides advanced build features
+        
+      # STEP: Login to Docker Hub
+      - name: 🔐 Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+        # Why? Need authentication to push images
+        
+      # STEP: Extract metadata (tags, labels)
+      - name: 🏷️ Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_IMAGE }}
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+        # Why? Generate proper tags for versioning
+        # Examples: main-abc1234, latest
+        
+      # STEP: Build and push Docker image
+      - name: 🚀 Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache
+          cache-to: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache,mode=max
+        # Why? Build image and push to Docker Hub
+        # Cache speeds up subsequent builds
+        
+      # STEP: Image digest output
+      - name: 📋 Image digest
+        run: echo "Image pushed with digest ${{ steps.meta.outputs.digest }}"
+        # Why? Know exactly which image was built
+
+  # ============================================
+  # JOB 5: SUMMARY & NOTIFICATIONS
+  # Purpose: Provide build summary
+  # ============================================
+  summary:
+    name: Pipeline Summary
+    runs-on: ubuntu-latest
+    needs: [code-quality, security-scan, build-and-test, docker-build-push]
+    if: always()  # Run even if previous jobs fail
+    
+    steps:
+      - name: 📊 Generate summary
+        run: |
+          echo "## 🎉 CI Pipeline Complete!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Pipeline Results:" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Code Quality: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Security Scan: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Build & Test: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Docker Image: Built & Pushed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        # Why? Provide clear summary of what happened

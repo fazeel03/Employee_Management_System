@@ -83,7 +83,7 @@ def start_server():
         # Start uvicorn
         subprocess.run([
             sys.executable, "-m", "uvicorn",
-            "main:app",
+            "app.main:app",
             "--host", "127.0.0.1",
             "--port", str(PORT),
             "--reload"

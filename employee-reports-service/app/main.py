@@ -1,7 +1,7 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import reports
+from app.routers import reports
 
 app = FastAPI(
     title="EMS Reports Service",

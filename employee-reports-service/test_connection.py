@@ -1,4 +1,4 @@
-from database import get_connection
+from app.db.database import get_connection
 import os
 import sys
 import traceback

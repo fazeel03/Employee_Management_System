@@ -15,7 +15,6 @@ const salaryRoutes = require('./routes/salaryRoutes');
 const managerRoutes = require('./routes/managerRoutes');
 const syncRoutes = require('./routes/syncRoutes');
 
-require('./db');
 const db = require('./db');
 
 app.use(cors({
@@ -46,10 +45,41 @@ app.use('/api/v1/auth', authRoutes);
 
 app.get('/api/v1/health', async (req, res) => {
   try {
-    await db.query('SELECT 1');
-    res.json({ status: 'Healthy', isHealthy: true });
+    const dbHealth = await db.checkDatabaseConnection();
+    res.json({
+      success: true,
+      status: 'Healthy',
+      isHealthy: true,
+      database: dbHealth
+    });
   } catch (err) {
-    res.json({ status: 'Unhealthy', isHealthy: false });
+    res.status(503).json({
+      success: false,
+      status: 'Unhealthy',
+      isHealthy: false,
+      database: {
+        isHealthy: false
+      }
+    });
+  }
+});
+
+app.get('/api/v1/health/db', async (req, res) => {
+  try {
+    const dbHealth = await db.checkDatabaseConnection();
+    res.json({
+      success: true,
+      status: 'Healthy',
+      database: dbHealth
+    });
+  } catch (err) {
+    res.status(503).json({
+      success: false,
+      status: 'Unhealthy',
+      database: {
+        isHealthy: false
+      }
+    });
   }
 });
 
@@ -94,6 +124,19 @@ const errorHandler = require('./middleware/errorHandler');
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(` MVC Server Running on Port ${PORT} `);
-});
+
+async function startServer() {
+  try {
+    await db.checkDatabaseConnection();
+
+    app.listen(PORT, () => {
+      console.log(` MVC Server Running on Port ${PORT} `);
+    });
+  } catch (error) {
+    console.error('Database connection failed. Server startup aborted.');
+    console.error(`Reason: ${error.code || error.message}`);
+    process.exit(1);
+  }
+}
+
+startServer();

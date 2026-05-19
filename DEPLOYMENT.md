@@ -94,3 +94,21 @@ Only `env/*.env.example` files should be committed. Before committing, check tha
 git status
 git diff --cached
 ```
+
+## GitHub Actions Deployment Secrets
+
+The root workflows live in `.github/workflows` and are monorepo-aware. The production deploy workflow connects to EC2 over SSH and runs the same Compose deployment used manually.
+
+Add these repository secrets in GitHub:
+
+```text
+EC2_HOST=your-ec2-public-ip-or-dns
+EC2_USER=ubuntu
+EC2_SSH_KEY=contents-of-the-private-ssh-key
+EC2_SSH_PORT=22
+EC2_APP_DIR=/home/ubuntu/employee_management_system
+```
+
+`env/api.env` and `env/reports.env` must already exist on EC2. Do not store those application secrets in GitHub Actions unless a future secret-sync process is intentionally designed.
+
+The CI workflow currently treats frontend lint and tests as non-blocking because the existing frontend has pre-existing lint failures. Docker builds and Compose validation remain blocking gates.
